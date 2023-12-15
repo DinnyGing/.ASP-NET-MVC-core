@@ -1,0 +1,41 @@
+﻿@using Lab3.ViewModel
+@model WineParam
+
+<h4>Client Form</h4>
+<hr />
+<div class="col-md-6">
+    <form asp-action="FillIn">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="MinAlcohol" class="control-label"></label>
+                <input asp-for="MinAlcohol" class="form-control" min="10"  type="number" step="0.1" />
+                <span asp-validation-for="MinAlcohol" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MaxAlcohol" class="control-label"></label>
+                <input asp-for="MaxAlcohol" class="form-control" min="10" type="number" step="0.1" />
+                <span asp-validation-for="MaxAlcohol" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MinDensity" class="control-label"></label>
+                <input asp-for="MinDensity" class="form-control" min="0.99" max="1.1" type="number" step="0.001" />
+                <span asp-validation-for="MinDensity" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MaxDensity" class="control-label"></label>
+                <input asp-for="MaxDensity" class="form-control" min="0.99" max="1.1" type="number" step="0.001" />
+                <span asp-validation-for="MaxDensity" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Quality" class="control-label"></label>
+                <input asp-for="Quality" class="form-control" min="0" max="10" type="number"/>
+                <span asp-validation-for="Quality" class="text-danger"></span>
+            </div>
+        <div class="form-row">
+            <br />
+            <div class="form-group col-md-6">
+                <input type="submit" value="Submit" class="btn btn-secondary btn-block" />
+            </div>
+        </div>
+    </form>
+</div>

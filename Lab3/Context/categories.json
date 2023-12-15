@@ -1,0 +1,22 @@
+[
+  {
+    "CategoryID": 1,
+    "Name": "Nails"
+  },
+  {
+    "CategoryID": 2,
+    "Name": "Hairs"
+  },
+  {
+    "CategoryID": 3,
+    "Name": "Massage"
+  },
+  {
+    "CategoryID": 4,
+    "Name": "MakeUp"
+  },
+  {
+    "CategoryID": 5,
+    "Name": "Brows"
+  }
+]

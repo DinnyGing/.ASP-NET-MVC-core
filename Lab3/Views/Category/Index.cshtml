@@ -1,0 +1,34 @@
+﻿@{
+    ViewData["Title"] = "Categories";
+}
+@using Lab3.Models
+@model IEnumerable<Category>
+
+<h2>Categories</h2>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <td></td>
+        <td></td>
+    </tr>
+    @foreach (var c in Model)
+    {
+            <tr>
+                <td>
+                @Html.DisplayFor(modelItem => c.Name)
+                </td>
+                <td>
+                    <a asp-action="Edit"  asp-route-id="@c.CategoryID" class="btn btn-secondary btn-block"><i class="fa fa-table"></i> Edit Category</a>
+                </td>
+                <td>
+                    <a asp-action="Delete"  asp-route-id="@c.CategoryID" class="btn btn-secondary btn-block" onclick="return confirm('Are you sure to delete this record?')"><i class="fa fa-table"></i> Delete Category</a>
+                </td>
+            </tr>
+    }
+</table>
+
+<div class="form-group col-md-6">
+    <a asp-action="Create" class="btn btn-secondary btn-block"><i class="fa fa-table"></i>Create New Category</a>
+</div>

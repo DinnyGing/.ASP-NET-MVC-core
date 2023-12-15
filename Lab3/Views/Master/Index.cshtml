@@ -1,0 +1,53 @@
+﻿@{
+    ViewData["Title"] = "Masters";
+}
+@using Lab3.Models
+@using Lab3.ViewModel
+@model IEnumerable<MasterView>
+
+<h2>Masters</h2>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LastName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Level)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CategoryName)
+        </th>
+        <td></td>
+        <td></td>
+    </tr>
+    @foreach (var m in Model)
+    {
+                <tr>
+                    <td>
+                @Html.DisplayFor(modelItem => m.FirstName)
+                    </td>
+                    <td>
+                @Html.DisplayFor(modelItem => m.LastName)
+                    </td>
+                    <td>
+                @Html.DisplayFor(modelItem => m.Level)
+                    </td>
+                    <td>
+                @Html.DisplayFor(modelItem => m.CategoryName)
+                    </td>
+                    <td>
+                        <a asp-action="Details"  asp-route-id="@m.MasterID" class="btn btn-secondary btn-block"><i class="fa fa-table"></i> View Master</a>
+                    </td>
+                    <td>
+                            <a asp-action="Delete"  asp-route-id="@m.MasterID" class="btn btn-secondary btn-block" onclick="return confirm('Are you sure to delete this record?')"><i class="fa fa-table"></i> Delete Procedure</a>
+                    </td>
+                </tr>
+    }
+</table>
+
+<div class="form-group col-md-6">
+    <a asp-action="Create" class="btn btn-secondary btn-block"><i class="fa fa-table"></i>Create New Procedure</a>
+</div>

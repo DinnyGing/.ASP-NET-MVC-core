@@ -1,0 +1,21 @@
+﻿@{
+    ViewData["Title"] = "Wine";
+}
+@using Lab3.Models
+@using Lab3.ViewModel
+@model IEnumerable<RecommendationView>
+
+<h2>Recommendations</h2>
+<a asp-action="FillIn" class="btn btn-secondary btn-block">Get One More Recommendation</a>
+@foreach (var recommendation in Model)
+{
+    <div class="card">
+        <div class="card-body">
+                    <h5 class="card-title">Quality: @Html.DisplayFor(modelItem => recommendation.Quality)</h5>
+                    <p class="card-text">Alcohol: @Html.DisplayFor(modelItem => recommendation.Alcohol)</p>
+                    <p class="card-text">Density: @Html.DisplayFor(modelItem => recommendation.Density)</p>
+                    <p class="card-text">Score: @Html.DisplayFor(modelItem => recommendation.Score)</p>
+        </div>
+
+    </div>
+}

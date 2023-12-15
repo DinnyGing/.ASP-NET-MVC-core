@@ -1,0 +1,21 @@
+﻿@using Lab3.Models
+@model Client
+
+<h4>Details</h4>
+<hr />
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">@Model.FirstName @Model.LastName</h5>
+        <p class="card-text">Email: @Model.Email</p>
+        <p class="card-text">Gender: @Model.Gender</p>
+        <p class="card-text">Age: @Model.Age</p>
+        <p class="card-text">Phone: @Model.Phone</p>
+        <div class="text-center">
+            @Html.ActionLink("Edit", "Edit", new { id = Model.UserID }, new { @class = "btn btn-secondary btn-block" })
+                <br />
+            @Html.ActionLink("Delete", "Delete", new { id = Model.UserID }, new { @class = "btn btn-danger" })
+        </div>
+    </div>
+</div>
+
+

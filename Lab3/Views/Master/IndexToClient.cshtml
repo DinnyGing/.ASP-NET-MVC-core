@@ -1,0 +1,12 @@
+﻿@{
+    ViewData["Title"] = "Masters";
+}
+@using Lab3.Models
+@using Lab3.ViewModel
+@model IEnumerable<MasterView>
+
+<h2>Appointments</h2>
+@foreach (var master in Model)
+{
+            <partial name="_MasterCard" model="master"/>
+}

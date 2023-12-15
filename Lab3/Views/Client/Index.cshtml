@@ -1,0 +1,46 @@
+﻿@{
+    ViewData["Title"] = "Clients";
+}
+@using Lab3.Models
+@model IEnumerable<Client>
+
+<h2>Clients</h2>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.FirstName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.LastName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Phone)
+        </th>
+        <td></td>
+        <td></td>
+    </tr>
+    @foreach (var u in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => u.FirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => u.LastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => u.Phone)
+            </td>
+            <td>
+                <a asp-action="Details"  asp-route-id="@u.UserID" class="btn btn-secondary btn-block"><i class="fa fa-table"></i> View Client</a>
+            </td>
+            <td>
+                    <a asp-action="Delete"  asp-route-id="@u.UserID" class="btn btn-secondary btn-block" onclick="return confirm('Are you sure to delete this record?')"><i class="fa fa-table"></i> Delete Client</a>
+            </td>
+        </tr>
+    }
+</table>
+
+<div class="form-group col-md-6">
+    <a asp-action="Create" class="btn btn-secondary btn-block"><i class="fa fa-table"></i>Create New Client</a>
+</div>

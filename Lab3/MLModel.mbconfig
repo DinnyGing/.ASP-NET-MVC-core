@@ -1,0 +1,256 @@
+﻿{
+  "Scenario": "Recommendation",
+  "DataSource": {
+    "Type": "TabularFile",
+    "Version": 1,
+    "FilePath": "C:\\Users\\Dinny\\source\\repos\\Lab3\\Lab3\\winequality-red.csv",
+    "Delimiter": ";",
+    "DecimalMarker": ".",
+    "HasHeader": true,
+    "ColumnProperties": [
+      {
+        "ColumnName": "fixed acidity",
+        "ColumnPurpose": "Ignore",
+        "ColumnDataFormat": "Single",
+        "IsCategorical": false,
+        "Type": "Column",
+        "Version": 4
+      },
+      {
+        "ColumnName": "volatile acidity",
+        "ColumnPurpose": "Ignore",
+        "ColumnDataFormat": "Single",
+        "IsCategorical": false,
+        "Type": "Column",
+        "Version": 4
+      },
+      {
+        "ColumnName": "citric acid",
+        "ColumnPurpose": "Ignore",
+        "ColumnDataFormat": "Single",
+        "IsCategorical": false,
+        "Type": "Column",
+        "Version": 4
+      },
+      {
+        "ColumnName": "residual sugar",
+        "ColumnPurpose": "Ignore",
+        "ColumnDataFormat": "Single",
+        "IsCategorical": false,
+        "Type": "Column",
+        "Version": 4
+      },
+      {
+        "ColumnName": "chlorides",
+        "ColumnPurpose": "Ignore",
+        "ColumnDataFormat": "Single",
+        "IsCategorical": false,
+        "Type": "Column",
+        "Version": 4
+      },
+      {
+        "ColumnName": "free sulfur dioxide",
+        "ColumnPurpose": "Ignore",
+        "ColumnDataFormat": "Single",
+        "IsCategorical": false,
+        "Type": "Column",
+        "Version": 4
+      },
+      {
+        "ColumnName": "total sulfur dioxide",
+        "ColumnPurpose": "Ignore",
+        "ColumnDataFormat": "Single",
+        "IsCategorical": false,
+        "Type": "Column",
+        "Version": 4
+      },
+      {
+        "ColumnName": "density",
+        "ColumnPurpose": "Item",
+        "ColumnDataFormat": "Single",
+        "IsCategorical": false,
+        "Type": "Column",
+        "Version": 4
+      },
+      {
+        "ColumnName": "pH",
+        "ColumnPurpose": "Ignore",
+        "ColumnDataFormat": "Single",
+        "IsCategorical": false,
+        "Type": "Column",
+        "Version": 4
+      },
+      {
+        "ColumnName": "sulphates",
+        "ColumnPurpose": "Ignore",
+        "ColumnDataFormat": "Single",
+        "IsCategorical": false,
+        "Type": "Column",
+        "Version": 4
+      },
+      {
+        "ColumnName": "alcohol",
+        "ColumnPurpose": "User",
+        "ColumnDataFormat": "Single",
+        "IsCategorical": false,
+        "Type": "Column",
+        "Version": 4
+      },
+      {
+        "ColumnName": "quality",
+        "ColumnPurpose": "Label",
+        "ColumnDataFormat": "Single",
+        "IsCategorical": true,
+        "Type": "Column",
+        "Version": 4
+      }
+    ]
+  },
+  "Environment": {
+    "Type": "LocalCPU",
+    "Version": 1
+  },
+  "RunHistory": {
+    "Version": 3,
+    "Type": "Result",
+    "Trials": [
+      {
+        "Version": 1,
+        "Type": "Trial",
+        "TrainerName": "MatrixFactorization",
+        "Score": -1.2889993115955138,
+        "RuntimeInSeconds": 20.877,
+        "Parameter": {
+          "_SCHEMA_": "e0 * e1 * e2 * e3 * e4",
+          "e0": {
+            "OutputColumnName": "density",
+            "InputColumnName": "density",
+            "AddKeyValueAnnotationsAsText": false
+          },
+          "e1": {
+            "OutputColumnName": "alcohol",
+            "InputColumnName": "alcohol",
+            "AddKeyValueAnnotationsAsText": false
+          },
+          "e2": {
+            "LabelColumnName": "quality",
+            "MatrixColumnIndexColumnName": "alcohol",
+            "MatrixRowIndexColumnName": "density",
+            "ApproximationRank": 57,
+            "LearningRate": 0.0044118359289994713,
+            "NumberOfIterations": 1396,
+            "Quiet": true
+          },
+          "e3": {
+            "OutputColumnName": "alcohol",
+            "InputColumnName": "alcohol"
+          },
+          "e4": {
+            "OutputColumnName": "density",
+            "InputColumnName": "density"
+          }
+        }
+      },
+      {
+        "Version": 1,
+        "Type": "Trial",
+        "TrainerName": "MatrixFactorization",
+        "Score": -4.2125054226352656,
+        "RuntimeInSeconds": 1.216,
+        "Parameter": {
+          "_SCHEMA_": "e0 * e1 * e2 * e3 * e4",
+          "e0": {
+            "OutputColumnName": "density",
+            "InputColumnName": "density",
+            "AddKeyValueAnnotationsAsText": false
+          },
+          "e1": {
+            "OutputColumnName": "alcohol",
+            "InputColumnName": "alcohol",
+            "AddKeyValueAnnotationsAsText": false
+          },
+          "e2": {
+            "LabelColumnName": "quality",
+            "MatrixColumnIndexColumnName": "alcohol",
+            "MatrixRowIndexColumnName": "density",
+            "ApproximationRank": 17,
+            "LearningRate": 0.0052141813918822584,
+            "NumberOfIterations": 68,
+            "Quiet": true
+          },
+          "e3": {
+            "OutputColumnName": "alcohol",
+            "InputColumnName": "alcohol"
+          },
+          "e4": {
+            "OutputColumnName": "density",
+            "InputColumnName": "density"
+          }
+        }
+      },
+      {
+        "Version": 1,
+        "Type": "Trial",
+        "TrainerName": "MatrixFactorization",
+        "Score": -9802.683599070715,
+        "RuntimeInSeconds": 0.172,
+        "Parameter": {
+          "_SCHEMA_": "e0 * e1 * e2 * e3 * e4",
+          "e0": {
+            "OutputColumnName": "density",
+            "InputColumnName": "density",
+            "AddKeyValueAnnotationsAsText": false
+          },
+          "e1": {
+            "OutputColumnName": "alcohol",
+            "InputColumnName": "alcohol",
+            "AddKeyValueAnnotationsAsText": false
+          },
+          "e2": {
+            "LabelColumnName": "quality",
+            "MatrixColumnIndexColumnName": "alcohol",
+            "MatrixRowIndexColumnName": "density",
+            "ApproximationRank": 10,
+            "LearningRate": 0.00011973298241245726,
+            "NumberOfIterations": 5,
+            "Quiet": true
+          },
+          "e3": {
+            "OutputColumnName": "alcohol",
+            "InputColumnName": "alcohol"
+          },
+          "e4": {
+            "OutputColumnName": "density",
+            "InputColumnName": "density"
+          }
+        }
+      }
+    ],
+    "Estimators": {
+      "e0": "MapValueToKey",
+      "e1": "MapValueToKey",
+      "e2": "MatrixFactorization",
+      "e3": "MapKeyToValue",
+      "e4": "MapKeyToValue"
+    },
+    "Schema": "e0 * e1 * e2 * e3 * e4",
+    "MetricName": "RSquared",
+    "ModelFilePath": "C:\\Users\\Dinny\\source\\repos\\Lab3\\Lab3\\MLModel.mlnet"
+  },
+  "Type": "TrainingConfig",
+  "Version": 4,
+  "TrainingOption": {
+    "Version": 1,
+    "Type": "RecommendationTrainingOption",
+    "TrainingTime": 180,
+    "OptimizeMetric": "RSquared",
+    "LabelColumn": "quality",
+    "UserIdColumn": "alcohol",
+    "ItemIdColumn": "density",
+    "ValidationOption": {
+      "Version": 0,
+      "Type": "CrossValidationValidationOption",
+      "NumberOfFolds": 5
+    }
+  }
+}

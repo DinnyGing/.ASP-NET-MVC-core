@@ -1,0 +1,18 @@
+﻿@{
+    ViewData["Title"] = "Procedures";
+}
+@using Lab3.Models
+@using Lab3.ViewModel
+@model IEnumerable<ProcedureView>
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+
+<h2>Procedures</h2>@if (HttpContextAccessor.HttpContext.Session.GetString("Role") == "master")
+{
+        <div class="form-group col-md-6">
+            <a asp-action="Create" class="btn btn-secondary btn-block"><i class="fa fa-table"></i>Create New Procedure</a>
+        </div>
+}
+@foreach (var procedure in Model)
+{
+    <partial name="_ProcedureCard" model="procedure"/>
+}

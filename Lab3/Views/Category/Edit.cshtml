@@ -1,0 +1,26 @@
+﻿@using Lab3.Models
+@model Category
+
+<h4>Category Form</h4>
+<hr />
+<div class="col-md-6">
+    <form asp-action="EditOrCreate">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="CategoryID" />
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+        <div class="form-row">
+            <br />
+            <div class="form-group col-md-6">
+                <input type="submit" value="Submit" class="btn btn-secondary btn-block" />
+            </div>
+            <br />
+            <div class="form-group col-md-6">
+                <a asp-action="Index" class="btn btn-secondary btn-block"><i class="fa fa-table"></i> Back to All Categories</a>
+            </div>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,53 @@
+﻿@{
+    ViewData["Title"] = "Appointments";
+}
+@using Lab3.Models
+@using Lab3.ViewModel
+@model IEnumerable<AppointmentView>
+
+<h2>Appointments</h2>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Date)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Time)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ProcedureName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CategoryName)
+        </th>
+        <td></td>
+        <td></td>
+    </tr>
+    @foreach (var u in Model)
+    {
+                <tr>
+                    <td>
+                @Html.DisplayFor(modelItem => u.Date)
+                    </td>
+                    <td>
+                @Html.DisplayFor(modelItem => u.Time)
+                    </td>
+                    <td>
+                @Html.DisplayFor(modelItem => u.ProcedureName)
+                    </td>
+                    <td>
+                @Html.DisplayFor(modelItem => u.CategoryName)
+                    </td>
+                    <td>
+                        <a asp-action="Details"  asp-route-id="@u.AppointmentID" class="btn btn-secondary btn-block"><i class="fa fa-table"></i> View Appointment</a>
+                    </td>
+                    <td>
+                            <a asp-action="Delete"  asp-route-id="@u.AppointmentID" class="btn btn-secondary btn-block" onclick="return confirm('Are you sure to delete this record?')"><i class="fa fa-table"></i> Delete Procedure</a>
+                    </td>
+                </tr>
+    }
+</table>
+
+<div class="form-group col-md-6">
+    <a asp-action="Create" class="btn btn-secondary btn-block"><i class="fa fa-table"></i>Create New Appointment</a>
+</div>

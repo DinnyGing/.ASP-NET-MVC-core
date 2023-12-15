@@ -1,0 +1,48 @@
+﻿@{
+    ViewData["Title"] = "Procedures";
+}
+@using Lab3.Models
+@using Lab3.ViewModel
+@model IEnumerable<ProcedureView>
+
+<h2>Procedures</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Price)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CategoryName)
+        </th>
+        <td></td>
+        <td></td>
+    </tr>
+    @foreach (var u in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => u.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => u.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => u.CategoryName)
+            </td>
+            <td>
+                <a asp-action="Details"  asp-route-id="@u.ProcedureID" class="btn btn-secondary btn-block"><i class="fa fa-table"></i> View Procedure</a>
+            </td>
+            <td>
+                <a asp-action="Delete"  asp-route-id="@u.ProcedureID" class="btn btn-secondary btn-block" onclick="return confirm('Are you sure to delete this record?')"><i class="fa fa-table"></i> Delete Procedure</a>
+            </td>
+        </tr>
+    }
+</table>
+
+    <div class="form-group col-md-6">
+        <a asp-action="Create" class="btn btn-secondary btn-block"><i class="fa fa-table"></i>Create New Procedure</a>
+    </div>

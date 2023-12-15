@@ -1,0 +1,31 @@
+﻿@using Lab3.ViewModel
+@model AppointmentView
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@using System.Globalization
+
+<div class="col-lg-4 col-md-6 pb-4">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">@Model.UserFullName</h5>
+            <p class="card-text">Date: @Model.Date.ToShortDateString()</p>
+            <p class="card-text">Time: @Model.Time.ToShortTimeString()</p>
+            <p class="card-text">Master: @Model.MasterFullName</p>
+            <p class="card-text">Procedure: @Model.ProcedureName</p>
+            <p class="card-text">Procedure Price: @Model.ProcedurePrice</p>
+            <p class="card-text">Category: @Model.CategoryName</p>
+
+            @if (HttpContextAccessor.HttpContext.Session.GetString("Role") != "master")
+            {
+                <div class="text-center">
+                    @if (HttpContextAccessor.HttpContext.Session.GetString("Role") != "client")
+                    {
+                    @Html.ActionLink("Edit", "Edit", new { id = Model.AppointmentID }, new { @class = "btn btn-secondary btn-block" })
+                    }
+                    <br />
+                    @Html.ActionLink("Delete", "Delete", new { id = Model.AppointmentID }, new { @class = "btn btn-danger" })
+                </div>
+            }
+        </div>
+
+    </div>
+</div>
