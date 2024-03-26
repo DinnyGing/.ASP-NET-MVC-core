@@ -1,0 +1,76 @@
+﻿@using Lab3.Models
+@using Lab3.ViewModel
+@model Appointment
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+
+<div class="row justify-content-center align-items-center h-100">
+    <div class="col-12 col-lg-9 col-xl-7">
+        <div class="card shadow-2-strong card-registration" style="border-radius: 15px;">
+            <div class="card-body p-4 p-md-5">
+                <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Appointment Form</h3>
+                <form asp-action="GetTimeSlots" enctype="multipart/form-data">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="AppointmentID" />
+                    <input type="hidden" asp-for="ClientID" />
+                    <input type="hidden" asp-for="ProcedureID" />
+                    <input type="hidden" asp-for="Time"/>
+
+                    <div class="row">
+
+                        <div class="col-md-6 mb-4">
+                            <label for="price">Date</label>
+                            <input onchange="dateChange" asp-for="Date" type="date" class="form-control" id="date" placeholder="Date">
+                            <label class="form-label select-label">Choose option</label>
+
+                        </div>
+                        
+
+                    </div>
+
+                    <div class="row mt-4 pt-2">
+                        <input type="submit" value="Choose date" class="btn btn-lg">
+                    </div>
+                </form>
+                </br>
+                <form asp-action="EditOrCreate" enctype="multipart/form-data">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="AppointmentID" />
+                    <input type="hidden" asp-for="ClientID" />
+                    <input type="hidden" asp-for="ProcedureID" />
+                    <input type="hidden" asp-for="Date" id="date" />
+                    <input type="hidden" asp-for="Time" id="time" />
+                    
+                    <div class="row">
+
+                        <div class="col-md-6 mb-4">
+                            <label for="price">Time</label>
+                            <div class="time-options">
+                                @foreach (var c in ViewBag.Times)
+                                {
+                                    <div class="time-option" id="@c" data-value="@c">@c</div>
+                                }
+                            </div>
+                            @section Scripts {
+                                <script>
+                                    var timeInput = document.getElementById('time');
+                                    var timeOptions = document.querySelectorAll('.time-option');
+                                    timeOptions.forEach(function (option) {
+                                        option.addEventListener('click', function () {
+                                            var selectedTime = this.getAttribute('data-value');
+                                            timeInput.value = selectedTime;
+                                        });
+                                    });
+                                </script>
+                            }
+                        </div>
+
+                    </div>
+
+                    <div class="row mt-4 pt-2">
+                        <input type="submit" value="Save" class="btn btn-primary btn-lg">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

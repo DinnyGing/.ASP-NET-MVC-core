@@ -6,9 +6,12 @@ namespace Lab3.Services
     public interface IProcedureService
     {
         List<ProcedureView> GetAll();
-        ProcedureView GetById(int id);
-        void Create(ProcedureView procedureView);
-        void Update(ProcedureView procedureView);
+        List<ProcedureView> GetAllByProcedureTypeId(int procedureTypeId);
+        List<ProcedureView> Filter(int MinPrice, int MaxPrice, int Type);
+        Procedure GetById(int id);
+        void Create(Procedure procedure);
+        void Update(Procedure procedure);
+        void UpdateRating(int ProcedureID, double Rating);
         void Delete(int id);
     }
 }

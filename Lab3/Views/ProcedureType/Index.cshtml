@@ -1,0 +1,46 @@
+﻿@{
+    ViewData["Title"] = "Procedure Types";
+}
+@using Lab3.Models
+@model IEnumerable<ProcedureType>
+
+<h2>Procedure Types</h2>
+<div class="form-group col-md-6">
+    <a asp-action="Create" class="btn btn-secondary btn-block"><i class="fa fa-table"></i>Create New Procedure Type</a>
+</div>
+@foreach (var u in Model)
+{
+    <br />
+    <div class="card" style="border-radius: 15px; width: 80%">
+        <div class="card-body p-4">
+            <div class="d-flex text-black">
+                <div class="flex-grow-1 ms-2">
+                    <div class="d-flex justify-content-around align-items-center pt-1">
+                        <div class="w-50 d-flex justify-content-around rounded-3 py-1 mb-1"
+                             style="background-color: #efefef;">
+                            <div class="w-auto">
+                                <p class="small text-muted mb-1">Name</p>
+                                <p class="mb-2 pb-1">@u.Name</p>
+                            </div>
+                            <div class="w-auto">
+                                <p class="small text-muted mb-1">Description</p>
+                                <p class="mb-2 pb-1">@u.Description</p>
+                            </div>
+                        </div>
+                        <form asp-action="Edit" asp-route-id="@u.ProcedureTypeID" method="get">
+                            <button type="submit" class="btn btn-outline-primary me-1 flex-grow-1">
+                                Edit Procedure Type
+                            </button>
+                        </form>
+                        <form asp-action="Delete" asp-route-id="@u.ProcedureTypeID" method="post">
+                            <button type="submit" class="btn btn-outline-primary me-1 flex-grow-1">
+                                Delete Procedure Type
+                            </button>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+}

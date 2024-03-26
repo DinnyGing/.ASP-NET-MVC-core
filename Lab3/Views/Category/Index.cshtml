@@ -5,30 +5,33 @@
 @model IEnumerable<Category>
 
 <h2>Categories</h2>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Name)
-        </th>
-        <td></td>
-        <td></td>
-    </tr>
-    @foreach (var c in Model)
-    {
-            <tr>
-                <td>
-                @Html.DisplayFor(modelItem => c.Name)
-                </td>
-                <td>
-                    <a asp-action="Edit"  asp-route-id="@c.CategoryID" class="btn btn-secondary btn-block"><i class="fa fa-table"></i> Edit Category</a>
-                </td>
-                <td>
-                    <a asp-action="Delete"  asp-route-id="@c.CategoryID" class="btn btn-secondary btn-block" onclick="return confirm('Are you sure to delete this record?')"><i class="fa fa-table"></i> Delete Category</a>
-                </td>
-            </tr>
-    }
-</table>
-
 <div class="form-group col-md-6">
     <a asp-action="Create" class="btn btn-secondary btn-block"><i class="fa fa-table"></i>Create New Category</a>
 </div>
+@foreach (var u in Model)
+{
+    <br />
+    <div class="card" style="border-radius: 15px; width: 80%">
+        <div class="card-body p-4">
+            <div class="d-flex text-black">
+                <div class="flex-grow-1 ms-2">
+                    <div class="d-flex justify-content-around align-items-center pt-1">
+                        <div class="w-50 d-flex justify-content-around rounded-3 py-1 mb-1"
+                             style="background-color: #efefef;">
+                            <div class="w-auto">
+                                <p class="small text-muted mb-1">Name</p>
+                                <p class="mb-2 pb-1">@u.Name</p>
+                            </div>
+                        </div>
+                        <form asp-action="Delete" asp-route-id="@u.CategoryID" method="post">
+                            <button type="submit" class="btn btn-outline-primary me-1 flex-grow-1">
+                                Delete Category
+                            </button>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+}

@@ -1,4 +1,4 @@
-﻿using Lab3.Context;
+﻿using Lab3.DB;
 using Lab3.Models;
 using System.Text.Json;
 
@@ -6,83 +6,53 @@ namespace Lab3.Repositories
 {
     public class CategoryRepository : ICategoryRepository
     {
-        IMasterRepository _masterRepository;
-        IProcedureRepository _procedureRepository;
-        string fileName = "C:\\Users\\Dinny\\source\\repos\\Lab3\\Lab3\\Context\\categories.json";
-        private List<Category> GetData()
-        {
-            string jsonContent = File.ReadAllText(fileName);
-            try
-            {
-                return JsonSerializer.Deserialize<List<Category>>(jsonContent);
-            }
-            catch { 
-                return new List<Category>();
-            }
-        }
-        private async Task SaveData(List<Category> data)
-        {
-            using FileStream createStream = File.Create(fileName);
-            await JsonSerializer.SerializeAsync(createStream, data);
-            await createStream.DisposeAsync();
-        }
-
-        public CategoryRepository(IProcedureRepository procedureRepository, IMasterRepository masterRepository)
-        {
-            _masterRepository = masterRepository;
-            _procedureRepository = procedureRepository;
-        }
-
         public async Task CreateAsync(Category category)
         {
-            var data = GetData();
-            data.Add(category);
-
-            await SaveData(data);
+            using ApplicationContext db = new ApplicationContext();
+            if (category != null)
+            {
+                db.Categories.Add(category);
+                db.SaveChanges();
+            }
         }
 
         public async Task DeleteAsync(int id)
         {
-            var data = GetData();
-
-            Category currentCategory = data.FirstOrDefault(p => p.CategoryID == id);
-            Master master = _masterRepository.GetAll().FirstOrDefault(p => p.CategoryId == id);
-            if (master != null)
+            using ApplicationContext db = new ApplicationContext();
+            var category = db.Categories.Find(id);
+            if (category != null)
             {
-                _masterRepository.DeleteAsync(master.MasterID);
+                db.Categories.Remove(category);
+                db.SaveChanges();
             }
-            Procedure procedure = _procedureRepository.GetAll().FirstOrDefault(p => p.CategoryId == id);
-            if (procedure != null)
-            {
-                _procedureRepository.DeleteAsync(procedure.ProcedureID);
-            }
-            data.Remove(currentCategory);
-
-            await SaveData(data);
         }
 
         public List<Category> GetAll()
         {
-            return GetData();
+            using ApplicationContext db = new ApplicationContext();
+            var categories = db.Categories.ToList();
+            return categories;
         }
 
         public Category GetById(int id)
         {
-            return GetData().FirstOrDefault(u => u.CategoryID == id);
+            var category = GetAll().FirstOrDefault(p => p.CategoryID == id);
+            return category;
         }
+
         public Category GetByName(string name)
         {
-            return GetData().FirstOrDefault(c => c.Name == name);
+            return GetAll().FirstOrDefault(p => p.Name == name);
         }
 
         public async Task UpdateAsync(Category category)
         {
-            var data = GetData();
-
-            Category currentCategory = data.FirstOrDefault(p => p.CategoryID == category.CategoryID);
-            currentCategory.Name = category.Name;
-
-            await SaveData(data);
+            using ApplicationContext db = new ApplicationContext();
+            if (category != null)
+            {
+                db.Categories.Update(category);
+                db.SaveChanges();
+            }
         }
     }
 }

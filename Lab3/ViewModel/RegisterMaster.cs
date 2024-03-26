@@ -1,4 +1,6 @@
-﻿namespace Lab3.ViewModel
+﻿using Lab3.Models;
+
+namespace Lab3.ViewModel
 {
     public class RegisterMaster
     {
@@ -12,6 +14,7 @@
         public string Phone { get; set; }
         public string Level { get; set; }
         public int AgeInCategory { get; set; }
-        public string CategoryName { get; set; }
+        public int Category { get; set; }
+        public byte[]? Photo { get; set; }
     }
 }

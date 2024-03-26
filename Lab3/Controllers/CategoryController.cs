@@ -35,13 +35,17 @@ namespace Lab3.Controllers
         {
             try
             {
+
                 if (category.CategoryID == 0)
                 {
-                    category.CategoryID = _categoryRepository.GetAll().Last().CategoryID + 1;
-                    _categoryRepository.CreateAsync(category);
+                    if (_categoryRepository.GetByName(category.Name) == null)
+                    {
+                        _categoryRepository.CreateAsync(category);
+                    }
                 }
-                else
-                    _categoryRepository.UpdateAsync(category);
+                else if (_categoryRepository.GetAll().Where(p => p.Name.Equals(category.Name)).Count() == 1)
+                        _categoryRepository.UpdateAsync(category);
+                
                 return RedirectToAction(nameof(Index));
             }
             catch

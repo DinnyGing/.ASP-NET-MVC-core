@@ -1,0 +1,38 @@
+﻿@using Lab3.Models
+@model User
+
+
+<div class="row justify-content-center align-items-center h-100">
+    <div class="col-12 col-lg-9 col-xl-7">
+        <div class="card shadow-2-strong card-registration" style="border-radius: 15px;">
+            <div class="card-body p-4 p-md-5">
+                <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">User Form</h3>
+                <form asp-action="Edit" enctype="multipart/form-data">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="UserID" />
+                    <input type="hidden" asp-for="Role" />
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <div class="form-floating mb-3">
+                                <input asp-for="UserName" type="text" class="form-control" id="userName" placeholder="User Name">
+                                <label for="userName">User Name</label>
+                                <span asp-validation-for="UserName" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <div class="form-floating mb-3">
+                                <input asp-for="Password" type="password" class="form-control" id="password" placeholder="Password">
+                                <label for="password">Password</label>
+                                <span asp-validation-for="Password" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-4 pt-2">
+                        <input type="submit" value="Save" class="btn btn-primary btn-lg">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

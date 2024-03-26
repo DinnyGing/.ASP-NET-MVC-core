@@ -5,11 +5,10 @@ namespace Lab3.Repositories
     public interface IClientRepository
     {
         List<Client> GetAll();
-        Client GetUserById(int id);
+        Client GetByUserId(int userId);
         Client GetById(int id);
-        Client GetByFirstNameAndLastName(string firstName, string lastName);
-        Task CreateAsync(Client user);
-        Task UpdateAsync(Client user);
+        Task CreateAsync(Client client);
+        Task UpdateAsync(Client client);
         Task DeleteAsync(int id);
     }
 }

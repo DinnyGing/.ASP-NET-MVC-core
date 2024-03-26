@@ -1,71 +1,61 @@
-﻿using Lab3.Models;
+﻿using Lab3.DB;
+using Lab3.Models;
 using System.Text.Json;
 
 namespace Lab3.Repositories
 {
     public class AppointmentRepository : IAppointmentRepository
     {
-        string fileName = "C:\\Users\\Dinny\\source\\repos\\Lab3\\Lab3\\Context\\appointments.json";
-        private List<Appointment> GetData()
-        {
-            string jsonContent = File.ReadAllText(fileName);
-            try
-            {
-                return JsonSerializer.Deserialize<List<Appointment>>(jsonContent);
-            }
-            catch
-            {
-                return new List<Appointment>();
-            }
-        }
-        private async Task SaveData(List<Appointment> data)
-        {
-            using FileStream createStream = File.Create(fileName);
-            await JsonSerializer.SerializeAsync(createStream, data);
-            await createStream.DisposeAsync();
-        }
         public async Task CreateAsync(Appointment appointment)
         {
-            var data = GetData();
-
-            data.Add(appointment);
-
-            await SaveData(data);
+            using ApplicationContext db = new ApplicationContext();
+            if (appointment != null)
+            {
+                db.Appointments.Add(appointment);
+                db.SaveChanges();
+            }
         }
 
         public async Task DeleteAsync(int id)
         {
-            var data = GetData();
-
-            Appointment currentAppointment = data.FirstOrDefault(p => p.AppointmentID == id);
-            data.Remove(currentAppointment);
-
-            await SaveData(data);
+            using ApplicationContext db = new ApplicationContext();
+            var appointment = db.Appointments.Find(id);
+            if (appointment != null)
+            {
+                db.Appointments.Remove(appointment);
+                db.SaveChanges();
+            }
         }
 
         public List<Appointment> GetAll()
         {
-            return GetData();
+            using ApplicationContext db = new ApplicationContext();
+            return db.Appointments.ToList();
+        }
+
+        public List<Appointment> GetAllByClientId(int clientId)
+        {
+            return GetAll().FindAll(p => p.ClientID == clientId);
+        }
+
+        public List<Appointment> GetAllByProcedureId(int procedureId)
+        {
+            return GetAll().FindAll(p => p.ProcedureID == procedureId);
         }
 
         public Appointment GetById(int id)
         {
-            return GetData().FirstOrDefault(p => p.AppointmentID == id);
+            return GetAll().FirstOrDefault(p => p.AppointmentID == id);
         }
 
         public async Task UpdateAsync(Appointment appointment)
         {
-            var data = GetData();
-
-            Appointment currentAppointment = data.FirstOrDefault(p => p.AppointmentID == appointment.AppointmentID);
-            currentAppointment.AppointmentID = appointment.AppointmentID;
-            currentAppointment.Date = appointment.Date;
-            currentAppointment.Time = appointment.Time;
-            currentAppointment.UserId = appointment.UserId;
-            currentAppointment.MasterId = appointment.MasterId;
-            currentAppointment.ProcedureId = appointment.ProcedureId;
-
-            await SaveData(data);
+            using ApplicationContext db = new ApplicationContext();
+            if (appointment != null)
+            {
+                db.Appointments.Update(appointment);
+                db.SaveChanges();
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿@{
+﻿@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@{
     ViewData["Title"] = "Appointments";
 }
 @using Lab3.Models
@@ -6,48 +7,58 @@
 @model IEnumerable<AppointmentView>
 
 <h2>Appointments</h2>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Date)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Time)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.ProcedureName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CategoryName)
-        </th>
-        <td></td>
-        <td></td>
-    </tr>
-    @foreach (var u in Model)
-    {
-                <tr>
-                    <td>
-                @Html.DisplayFor(modelItem => u.Date)
-                    </td>
-                    <td>
-                @Html.DisplayFor(modelItem => u.Time)
-                    </td>
-                    <td>
-                @Html.DisplayFor(modelItem => u.ProcedureName)
-                    </td>
-                    <td>
-                @Html.DisplayFor(modelItem => u.CategoryName)
-                    </td>
-                    <td>
-                        <a asp-action="Details"  asp-route-id="@u.AppointmentID" class="btn btn-secondary btn-block"><i class="fa fa-table"></i> View Appointment</a>
-                    </td>
-                    <td>
-                            <a asp-action="Delete"  asp-route-id="@u.AppointmentID" class="btn btn-secondary btn-block" onclick="return confirm('Are you sure to delete this record?')"><i class="fa fa-table"></i> Delete Procedure</a>
-                    </td>
-                </tr>
-    }
-</table>
 
-<div class="form-group col-md-6">
-    <a asp-action="Create" class="btn btn-secondary btn-block"><i class="fa fa-table"></i>Create New Appointment</a>
+<div class="w-100 d-flex justify-content-between p-3">
+
+    @if (HttpContextAccessor.HttpContext.Session.GetString("Role") == "admin")
+    {
+        <div class="form-group col-md-6 w-25">
+            <a asp-action="Create" class="btn btn-secondary btn-block"><i class="fa fa-table"></i>Create New Appointment</a>
+        </div>
+
+    }
+    </br>
+    @if (HttpContextAccessor.HttpContext.Session.GetString("Role") != "admin")
+    {
+
+        <div class="form-group col-md-6 w-25">
+            <a asp-action="Shedule" class="btn btn-secondary btn-block"><i class="fa fa-table"></i>Check Shedule For Current Week</a>
+        </div>
+    }
+    <div class="form-group col-md-6  w-75">
+        <form asp-action="Filter" enctype="multipart/form-data">
+
+            <div class="row d-flex justify-content-between">
+                <div class="col-md-6 mb-4 w-25">
+                    <label for="price">Start Date</label>
+                    <input for="StartDate" name="StartDate" type="date" class="form-control" id="StartDate" placeholder="Start Date">
+                    <label class="form-label select-label">Choose option</label>
+
+                </div>
+                <div class="col-md-6 mb-4 w-25">
+                    <label for="price">End Date</label>
+                    <input for="EndDate" name="EndDate" type="date" class="form-control" id="EndDate" placeholder="End Date">
+                    <label class="form-label select-label">Choose option</label>
+
+                </div>
+                <div class="col-md-6 mb-4 w-auto">
+                    <input type="submit" value="🔍" class="btn btn-primary btn-lg">
+                </div>
+            </div>
+        </form>
+    </div>
 </div>
+</br>
+<section style="background-color: #eee;">
+    <div class="container py-5">
+        @foreach (var productChunk in Model.Chunk(3))
+        {
+            <div class="w-100 d-flex justify-content-around">
+                @foreach (var u in productChunk)
+                {
+                    <partial name="_AppointmentCard" model="u" />
+                }
+            </div>
+        }
+    </div>
+</section>

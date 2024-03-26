@@ -27,7 +27,7 @@ namespace Lab3.Services
 
         public List<User> GetAll()
         {
-            throw new NotImplementedException();
+            return _userRepository.GetAll().Where(u => !u.Role.Equals("admin")).ToList();
         }
 
         public User GetById(int id)
@@ -38,7 +38,7 @@ namespace Lab3.Services
         public int Login(User user)
         {
             User foundUser = _userRepository.GetAll().FirstOrDefault(p => p.UserName == user.UserName && p.Password == user.Password);
-            if(foundUser != null)
+            if (foundUser != null)
             {
                 return foundUser.UserID;
             }
@@ -47,19 +47,17 @@ namespace Lab3.Services
 
         public void Register(RegisterView registerView)
         {
-            int userID = _userRepository.GetAll().Last().UserID + 1;
-            int clientId = _clientRepository.GetAll().Last().UserID + 1;
+
             User user = new User()
             {
-                UserID = userID,
                 UserName = registerView.UserName,
                 Password = registerView.Password,
                 Role = "client",
             };
             Client client = new Client()
             {
-                ClientID = clientId,
-                UserID = userID,
+                User = user,
+                UserID = user.UserID,
                 FirstName = registerView.FirstName,
                 LastName = registerView.LastName,
                 Age = registerView.Age,
@@ -67,13 +65,12 @@ namespace Lab3.Services
                 Phone = registerView.Phone,
                 Gender = registerView.Gender
             };
-            _userRepository.CreateAsync(user);
             _clientRepository.CreateAsync(client);
         }
 
         public void Update(User user)
         {
-            throw new NotImplementedException();
+            _userRepository.UpdateAsync(user);
         }
     }
 }

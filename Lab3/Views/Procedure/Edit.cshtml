@@ -1,51 +1,69 @@
 ﻿@using Lab3.Models
 @using Lab3.ViewModel
-@model ProcedureView
+@model Procedure
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 
-<h4>Procedure Form</h4>
-<hr />
-<div class="col-md-6">
-    <form asp-action="EditOrCreate">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="ProcedureID" />
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            @if (HttpContextAccessor.HttpContext.Session.GetString("Role") != "master")
-            {
-                <div class="form-group">
-                    <label asp-for="CategoryName" class="control-label"></label>
-                    <select asp-for="CategoryName" name="CategoryName">
-                        @foreach (var c in ViewBag.Categories)
+<div class="row justify-content-center align-items-center h-100">
+    <div class="col-12 col-lg-9 col-xl-7">
+        <div class="card shadow-2-strong card-registration" style="border-radius: 15px;">
+            <div class="card-body p-4 p-md-5">
+                <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Procedure Form</h3>
+                <form asp-action="EditOrCreate" enctype="multipart/form-data">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="ProcedureID" />
+
+                    <div class="row">
+                        @if (HttpContextAccessor.HttpContext.Session.GetString("Role") != "master")
                         {
-                            <option value="@c.Name">@c.Name</option>
+                            <div class="col-md-6 mb-4">
+                                <label for="price">Master</label>
+                                <select class="select form-control-lg" asp-for="MasterID" name="MasterID">
+                                    @foreach (var c in ViewBag.Masters)
+                                    {
+                                        <option value="@c.MasterID">@c.FirstName  @c.LastName @c.Level @c.CategoryName</option>
+                                    }
+                                </select>
+                                <label class="form-label select-label">Choose option</label>
+
+                            </div>
                         }
-                    </select>
-                    <span asp-validation-for="CategoryName" class="text-danger"></span>
-                </div>
-            }
-            <div class="form-group">
-                <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" class="form-control" min="0" type="number"/>
-                <span asp-validation-for="Price" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <textarea asp-for="Description" class="form-control"></textarea>
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-        <div class="form-row">
-            <br />
-            <div class="form-group col-md-6">
-                <input type="submit" value="Submit" class="btn btn-secondary btn-block" />
-            </div>
-            <br />
-            <div class="form-group col-md-6">
-                <a asp-action="Index" class="btn btn-secondary btn-block"><i class="fa fa-table"></i> Back to All Clients</a>
+                        <div class="col-md-6 mb-4">
+                            <label for="price">Type</label>
+                            <select class="select form-control-lg w-100" asp-for="ProcedureTypeID" name="ProcedureTypeID">
+                                @foreach (var c in ViewBag.Types)
+                                {
+                                    <option value="@c.ProcedureTypeID">@c.Name</option>
+                                }
+                            </select>
+                            <label class="form-label select-label">Choose option</label>
+
+                        </div>
+                        
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <div class="form-floating mb-3">
+                                <input asp-for="Price" type="text" class="form-control" id="price" placeholder="Price">
+                                <label for="price">Price</label>
+                                <span asp-validation-for="Price" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <div class="form-floating mb-3">
+                                <input asp-for="Duration" type="text" class="form-control" id="duration" placeholder="Duration">
+                                <label for="duration">Duration In Minutes</label>
+                                <span asp-validation-for="Duration" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    
+                    <div class="row mt-4 pt-2">
+                        <input type="submit" value="Save" class="btn btn-primary btn-lg">
+
+                    </div>
+                </form>
             </div>
         </div>
-    </form>
+    </div>
 </div>

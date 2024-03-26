@@ -14,6 +14,8 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 builder.Services.AddTransient<IClientRepository, ClientRepository>();
+builder.Services.AddTransient<IClientService, ClientService>();
+builder.Services.AddTransient<IProcedureTypeRepository, ProcedureTypeRepository>();
 builder.Services.AddTransient<ICategoryRepository, CategoryRepository>();
 builder.Services.AddTransient<IProcedureRepository, ProcedureRepository>();
 builder.Services.AddTransient<IProcedureService, ProcedureService>();

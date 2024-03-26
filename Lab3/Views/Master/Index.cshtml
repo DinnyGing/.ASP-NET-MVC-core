@@ -1,4 +1,5 @@
-﻿@{
+﻿@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@{
     ViewData["Title"] = "Masters";
 }
 @using Lab3.Models
@@ -6,48 +7,54 @@
 @model IEnumerable<MasterView>
 
 <h2>Masters</h2>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.FirstName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.LastName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Level)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CategoryName)
-        </th>
-        <td></td>
-        <td></td>
-    </tr>
-    @foreach (var m in Model)
+<div class="w-100 d-flex justify-content-between p-3">
+    @if (HttpContextAccessor.HttpContext.Session.GetString("Role") != "client")
     {
-                <tr>
-                    <td>
-                @Html.DisplayFor(modelItem => m.FirstName)
-                    </td>
-                    <td>
-                @Html.DisplayFor(modelItem => m.LastName)
-                    </td>
-                    <td>
-                @Html.DisplayFor(modelItem => m.Level)
-                    </td>
-                    <td>
-                @Html.DisplayFor(modelItem => m.CategoryName)
-                    </td>
-                    <td>
-                        <a asp-action="Details"  asp-route-id="@m.MasterID" class="btn btn-secondary btn-block"><i class="fa fa-table"></i> View Master</a>
-                    </td>
-                    <td>
-                            <a asp-action="Delete"  asp-route-id="@m.MasterID" class="btn btn-secondary btn-block" onclick="return confirm('Are you sure to delete this record?')"><i class="fa fa-table"></i> Delete Procedure</a>
-                    </td>
-                </tr>
+        <div class="form-group col-md-6 w-25">
+            <a asp-action="Create" class="btn btn-secondary btn-block"><i class="fa fa-table"></i>Create New Master</a>
+        </div>
     }
-</table>
+    <div class="form-group col-md-6  w-75">
+        <form asp-action="Filter" enctype="multipart/form-data">
 
-<div class="form-group col-md-6">
-    <a asp-action="Create" class="btn btn-secondary btn-block"><i class="fa fa-table"></i>Create New Procedure</a>
+            <div class="row d-flex justify-content-between">
+
+                <div class="col-md-6 form-floating mb-4 w-25">
+                    <input for="AgeInCategory" name="AgeInCategory" type="number" class="form-control" id="AgeInCategory" min="0" placeholder="Age In Category">
+                    <label for="AgeInCategory">Age In Category</label>
+                </div>
+                <div class="col-md-6 mb-4 w-25">
+                    <select class="select form-control-lg" for="Level" name="Level">
+                        <option value="">All</option>
+                        <option value="trainer">trainer</option>
+                        <option value="specialist">specialist</option>
+                        <option value="master">master</option>
+                        <option value="professional">professional</option>
+                        <option value="advanced">advanced</option>
+                    </select>
+                    <label class="form-label select-label">Choose option</label>
+
+                </div>
+                <div class="col-md-6 mb-4 w-25">
+                    <select class="select form-control-lg" for="Category" name="Category">
+                        <option value="-1">All</option>
+                        @foreach (var c in ViewBag.Categories)
+                        {
+                            <option value="@c.CategoryID">@c.Name</option>
+                        }
+                    </select>
+                    <label class="form-label select-label">Choose option</label>
+
+                </div>
+                <div class="col-md-6 mb-4 w-auto">
+                    <input type="submit" value="🔍" class="btn btn-primary btn-lg">
+                </div>
+            </div>
+        </form>
+    </div>
 </div>
+@foreach (var u in Model)
+{
+    <br />
+    <partial name="_MasterCard" model="u" />
+}

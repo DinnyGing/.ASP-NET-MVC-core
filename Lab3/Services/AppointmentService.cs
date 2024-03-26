@@ -8,35 +8,21 @@ namespace Lab3.Services
     public class AppointmentService : IAppointmentService
     {
         IAppointmentRepository _appointmentRepository;
-        ICategoryRepository _categoryRepository;
+        IProcedureTypeRepository _procedureTypeRepository;
         IProcedureRepository _procedureRepository;
-        IClientRepository _userRepository;
+        IClientRepository _clientRepository;
         IMasterRepository _masterRepository;
-        public AppointmentService(ICategoryRepository categoryRepository, IProcedureRepository procedureRepository, 
-            IAppointmentRepository appointmentRepository, IMasterRepository masterRepository, IClientRepository userRepository)
+        public AppointmentService(IProcedureTypeRepository procedureTypeRepository, IProcedureRepository procedureRepository, 
+            IAppointmentRepository appointmentRepository, IMasterRepository masterRepository, IClientRepository clientRepository)
         {
-            _categoryRepository = categoryRepository;
+            _procedureTypeRepository = procedureTypeRepository;
             _procedureRepository = procedureRepository;
             _appointmentRepository = appointmentRepository;
             _masterRepository = masterRepository;
-            _userRepository = userRepository;
+            _clientRepository = clientRepository;
         }
-        public void Create(AppointmentView appointmentView)
+        public void Create(Appointment appointment)
         {
-            string[] userFullName = appointmentView.UserFullName.Split(' ');
-            string[] masterFullName = appointmentView.MasterFullName.Split(' ');
-            Client user = _userRepository.GetByFirstNameAndLastName(userFullName[0], userFullName[1]);
-            Master master = _masterRepository.GetByFirstNameAndLastName(masterFullName[0], masterFullName[1]);
-            Procedure procedure = _procedureRepository.GetByName(appointmentView.ProcedureName);
-            Appointment appointment = new Appointment()
-            {
-                AppointmentID = appointmentView.AppointmentID,
-                Date = appointmentView.Date.ToString("yyyy-MM-dd"),
-                Time = appointmentView.Time.ToString("HH:mm:ss"),
-                UserId = user.ClientID,
-                ProcedureId = procedure.ProcedureID,
-                MasterId = master.MasterID
-            };
             _appointmentRepository.CreateAsync(appointment);
         }
 
@@ -50,48 +36,69 @@ namespace Lab3.Services
             List<AppointmentView> appointmentViews = new List<AppointmentView>();
             List<Appointment> appointments = _appointmentRepository.GetAll();
             appointments.ForEach(appointment => {
-                appointmentViews.Add(GetById(appointment.AppointmentID));
+				Client client = _clientRepository.GetById(appointment.ClientID);
+				Procedure procedure = _procedureRepository.GetById(appointment.ProcedureID);
+				Master master = _masterRepository.GetById(procedure.MasterID);
+				ProcedureType procedureType = _procedureTypeRepository.GetById(procedure.ProcedureTypeID);
+				AppointmentView appointmentView = new AppointmentView()
+				{
+					AppointmentID = appointment.AppointmentID,
+					Date = appointment.Date,
+					Time = appointment.Time,
+					Duration = procedure.Duration,
+					ProcedureName = procedureType.Name,
+					ProcedurePrice = procedure.Price,
+					ClientFirstName = client.FirstName,
+					ClientLastName = client.LastName,
+					MasterFirstName = master.FirstName,
+					MasterLastName = master.LastName,
+				};
+				appointmentViews.Add(appointmentView);
             });
             return appointmentViews;
+        
         }
-
-        public AppointmentView GetById(int id)
+        public Dictionary<string, List<String>> GetMapDateTime(int procedureId)
         {
-            Appointment appointment = _appointmentRepository.GetById(id);
-            Client user = _userRepository.GetById(appointment.UserId);
-            Master master = _masterRepository.GetById(appointment.MasterId);
-            Procedure procedure = _procedureRepository.GetById(appointment.ProcedureId);
-            Category category = _categoryRepository.GetById(procedure.CategoryId);
-            AppointmentView appointmentView  = new AppointmentView()
+            var dateTimes = new Dictionary<string, List<String>>();
+            Procedure procedure = _procedureRepository.GetById(procedureId);
+            List<Appointment> appointments = GetAllByMasterId(procedure.MasterID);
+            foreach (Appointment appointment in appointments)
             {
-                AppointmentID = appointment.AppointmentID,
-                Date = DateTime.ParseExact(appointment.Date, "yyyy-MM-dd", CultureInfo.InvariantCulture),
-                Time = DateTime.ParseExact(appointment.Time, "HH:mm:ss", CultureInfo.InvariantCulture),
-                UserFullName = user.FirstName + ' ' + user.LastName,
-                MasterFullName = master.FirstName + ' ' + master.LastName,
-                ProcedureName = procedure.Name,
-                ProcedurePrice = procedure.Price,
-                CategoryName = category.Name
-            };
-            return appointmentView;
+                List<string> times;
+                if (dateTimes.ContainsKey(appointment.Date))
+                {
+                    times = dateTimes[appointment.Date];    
+                }
+                else
+                {
+                    times = new List<string>();
+                }
+                times.Add(appointment.Time);
+                dateTimes[appointment.Date] = times;
+            }
+
+            return dateTimes;
         }
-
-        public void Update(AppointmentView appointmentView)
+        public List<Appointment> GetAllByMasterId(int masterId)
         {
-            string[] userFullName = appointmentView.UserFullName.Split(' ');
-            string[] masterFullName = appointmentView.MasterFullName.Split(' ');
-            Client user = _userRepository.GetByFirstNameAndLastName(userFullName[0], userFullName[1]);
-            Master master = _masterRepository.GetByFirstNameAndLastName(masterFullName[0], masterFullName[1]); 
-            Procedure procedure = _procedureRepository.GetByName(appointmentView.ProcedureName);
-            Appointment appointment = new Appointment()
+            Master master = _masterRepository.GetById(masterId);
+
+            List<Procedure > procedureList = _procedureRepository.GetAllByMasterId(masterId);
+            List<Appointment> appointments = new List<Appointment>();
+            foreach(Procedure procedure in procedureList)
             {
-                AppointmentID = appointmentView.AppointmentID,
-                Date = appointmentView.Date.ToString("yyyy-MM-dd"),
-                Time = appointmentView.Time.ToString("HH:mm:ss"),
-                UserId = user.UserID,
-                ProcedureId = procedure.ProcedureID,
-                MasterId = master.MasterID
-            };
+                appointments.AddRange(_appointmentRepository.GetAllByProcedureId(procedure.ProcedureID));
+            }
+            return appointments;
+        }
+        public Appointment GetById(int id)
+        {
+            return _appointmentRepository.GetById(id);
+		}
+
+        public void Update(Appointment appointment)
+        {
             _appointmentRepository.UpdateAsync(appointment);
         }
     }

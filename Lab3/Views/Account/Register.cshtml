@@ -1,60 +1,153 @@
 ﻿@using Lab3.ViewModel
 @model RegisterView
+<div class="row d-flex align-items-center justify-content-center">
+    <!-- Pills navs -->
+    <ul class="nav w-50 nav-pills nav-justified mb-3" id="ex1" role="tablist">
+        <li class="nav-item" role="presentation">
+            <a class="nav-link active" id="tab-login" data-mdb-toggle="pill" asp-action="LogIn" role="tab"
+               aria-controls="pills-login" aria-selected="true">Login</a>
+        </li>
+        <li class="nav-item" role="presentation">
+            <a class="nav-link" id="tab-register" data-mdb-toggle="pill" asp-action="Register" role="tab"
+               aria-controls="pills-register" aria-selected="false">Register</a>
+        </li>
+    </ul>
+    <!-- Pills navs -->
+</div>
+<section class="vh-180" style="background-color: #eee;">
+    
+    <div class="container h-150">
+        
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col-lg-12 col-xl-11">
+                <div class="card text-black" style="border-radius: 25px;">
+                    <div class="card-body p-md-5">
+                        <div class="row justify-content-center">
 
-<h4>LogUp</h4>
-<hr />
-<div class="col-md-6">
-    <form asp-action="Register">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="UserName" class="control-label"></label>
-                <input asp-for="UserName" class="form-control" />
-                <span asp-validation-for="UserName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Password" class="control-label"></label>
-                <input type="password" asp-for="Password" class="form-control" />
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="FirstName" class="control-label"></label>
-                <input asp-for="FirstName" class="form-control" />
-                <span asp-validation-for="FirstName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="LastName" class="control-label"></label>
-                <input asp-for="LastName" class="form-control" />
-                <span asp-validation-for="LastName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Gender" class="control-label"></label>
-                <input id="male" name="Gender" type="radio" value="male" asp-for="Gender" />
-                <span>male</span>
+                            <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Sign up</p>
 
-                <input id="female" name="Gender" type="radio" value="female" asp-for="Gender" /> 
-                <span>female</span>
-                <span asp-validation-for="LastName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Age" class="control-label"></label>
-                <input asp-for="Age" class="form-control" min="18" type="number"/>
-                <span asp-validation-for="Age" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Phone" class="control-label"></label>
-                <input asp-for="Phone" class="form-control" />
-                <span asp-validation-for="Phone" class="text-danger"></span>
-            </div>
-        <div class="form-row">
-            <br />
-            <div class="form-group col-md-6">
-                <input type="submit" value="Submit" class="btn btn-secondary btn-block" />
+                            <form asp-action="Register" class="mx-1 mx-md-4">
+                                <div class="d-flex justify-content-center mb-2">
+                                        
+                                    <img id="selectedAvatar" src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-1.webp"
+                                                class="rounded-circle" style="width: 200px; height: 200px; object-fit: cover;" alt="example placeholder">
+                                        
+
+                                </div>
+                                <div class="d-flex justify-content-center mb-2">
+                                    <div class="btn btn-primary btn-rounded">
+                                        <label class="form-label text-white m-1" for="customFile2">Choose file</label>
+                                        <input type="file" name="upload" id="upload" onchange="displaySelectedImage(event, 'selectedAvatar')">
+                                    </div>
+                                </div>
+                                
+                                
+                                <div class="row justify-content-center">
+                                    <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
+                                        <div class="row">
+                                            <div class="col-md-6 mb-4">
+                                                <div class="form-outline mb-4">
+                                                    <div class="form-floating mb-3">
+                                                        <span asp-validation-for="UserName" class="text-danger"></span>
+                                                        <input asp-for="UserName" type="text" id="userName" class="form-control form-control-lg" placeholder="User Name" />
+                                                        <label asp-for="UserName" class="form-label" for="form1Example13">User Name</label>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6 mb-4">
+                                                <div class="form-outline mb-4">
+                                                    <div class="form-floating mb-3">
+                                                        <input asp-for="Password" type="password" id="password" class="form-control form-control-lg" placeholder="Password" />
+                                                        <label asp-for="Password" class="form-label" for="password">Password</label>
+                                                        <span asp-validation-for="Password" class="text-danger"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 mb-4">
+                                                <div class="form-floating mb-3">
+                                                    <input asp-for="FirstName" type="text" class="form-control" id="firstName" placeholder="First Name">
+                                                    <label for="firstName">First Name</label>
+                                                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 mb-4">
+                                                <div class="form-floating mb-3">
+                                                    <input asp-for="LastName" type="text" class="form-control" id="lastName" placeholder="Last Name">
+                                                    <label for="lastName">Last Name</label>
+                                                    <span asp-validation-for="LastName" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-6 mb-4 d-flex align-items-center">
+                                                <div class="form-floating mb-3">
+                                                    <input asp-for="Age" type="number" class="form-control" id="age" placeholder="Age" min="18">
+                                                    <label for="age">Age</label>
+                                                    <span asp-validation-for="Age" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 mb-4">
+                                                <h6 class="mb-2 pb-1">Gender:</h6>
+                                                <div class="form-check form-check-inline">
+                                                    <input asp-for="Gender" class="form-check-input" type="radio" id="femaleGender" value="female">
+                                                    <label class="form-check-label" for="femaleGender">Female</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input asp-for="Gender" class="form-check-input" type="radio" id="maleGender" value="male">
+                                                    <label class="form-check-label" for="maleGender">Male</label>
+                                                </div>
+                                                <span asp-validation-for="Gender" class="text-danger"></span>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-6 mb-4 pb-2">
+                                                <div class="form-floating mb-3">
+                                                    <input asp-for="Email" type="email" class="form-control" id="email" placeholder="Email">
+                                                    <label for="email">Email</label>
+                                                    <span asp-validation-for="Email" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 mb-4 pb-2">
+                                                <div class="form-floating mb-3">
+                                                    <input asp-for="Phone" type="tel" class="form-control" id="phone" placeholder="Phone number">
+                                                    <label for="phone">Phone number</label>
+                                                    <span asp-validation-for="Phone" class="text-danger"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2">
+
+                                        <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-registration/draw1.webp"
+                                                class="img-fluid" alt="Sample image">
+
+                                    </div>
+
+                                </div>
+                                <div class="form-check d-flex justify-content-center mb-5">
+                                    <input class="form-check-input me-2" type="checkbox" value="" id="form2Example3c" />
+                                    <label class="form-check-label" for="form2Example3">
+                                        I agree all statements in <a href="#!">Terms of service</a>
+                                    </label>
+                                </div>
+
+                                <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
+                                    <button type="submit" class="btn btn-primary btn-lg">Register</button>
+                                </div>
+
+                            </form>
+
+                            
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </form>
-</div>
+    </div>
+</section>

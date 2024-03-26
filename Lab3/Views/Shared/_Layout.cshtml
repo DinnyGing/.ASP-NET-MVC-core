@@ -29,14 +29,11 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="RecommendationWine" asp-action="Index">Wine</a>
-                        </li>
                         @if (role == "admin")
                         {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Index">Users</a>
+                            </li>
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Client" asp-action="Index">Clients</a>
                             </li>
@@ -44,30 +41,37 @@
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Category" asp-action="Index">Categories</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Master" asp-action="Index">Masters</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="ProcedureType" asp-action="Index">Procedure Types</a>
+                            </li>
+                        }
+                        
+                        @if (role == "client" || role == "admin" || role == "master")
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Procedure" asp-action="Index">Procedures</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Appointment" asp-action="Index">Appointments</a>
                             </li>
 
+
+                        }
+                        @if (role == "client" || role == "admin")
+                        {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Procedure" asp-action="Index">Procedures</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Master" asp-action="Index">Masters</a>
+                            </li>
+                        }
+                        @if (role == "master")
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Master" asp-action="Details">My Account</a>
                             </li>
                         }
                         @if (role == "client")
                         {
-                             <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Master" asp-action="IndexToClient">Masters</a>
-                            </li>
-                            
-                        }
-                        @if (role == "client" || role == "master")
-                        {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Procedure" asp-action="IndexToClient">Procedures</a>
-                            </li>
-                            <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="" asp-controller="Appointment" asp-action="IndexToClient">Appointments</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Client" asp-action="Details">My Account</a>
                             </li>
                         }
                     </ul>

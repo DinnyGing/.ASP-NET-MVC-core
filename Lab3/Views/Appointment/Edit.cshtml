@@ -1,76 +1,55 @@
 ﻿@using Lab3.Models
 @using Lab3.ViewModel
-@model AppointmentView
+@model Appointment
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 
-<h4>Appointment Form</h4>
-<hr />
-<div class="col-md-6">
-    <form asp-action="EditOrCreate">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="AppointmentID" />
-            <div class="form-group">
-                <label asp-for="Date" class="control-label"></label>
-                <input asp-for="Date" type="date" id="start" name="Date" data-val="true" min="2023-12-15" max="2024-12-31" class="form-control" />
-                <span asp-validation-for="Date" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Time" class="control-label"></label>
-                <input asp-for="Time" type="time" id="appt" name="Time" data-val="true" min="08:00" max="20:00" class="form-control" />
-                <span asp-validation-for="Time" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CategoryName" class="control-label"></label>
-                <select asp-for="CategoryName" name="CategoryName">
-                    @foreach (var c in ViewBag.Categories)
-                    {
-                        <option value="@c.Name">@c.Name</option>
-                    }
-                </select>
-                <span asp-validation-for="CategoryName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ProcedureName" class="control-label"></label>
-                <select asp-for="ProcedureName" name="ProcedureName">
-                    @foreach (var c in ViewBag.Procedures)
-                    {
-                        <option value="@c.Name">@c.Name</option>
-                    }
-                </select>
-                <span asp-validation-for="ProcedureName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="MasterFullName" class="control-label"></label>
-                <select asp-for="MasterFullName" name="MasterFullName">
-                @foreach (var c in ViewBag.Masters)
-                {
-                    <option value="@c.FirstName @c.LastName">@c.FirstName @c.LastName</option>
-                }
-                </select>
-                <span asp-validation-for="MasterFullName" class="text-danger"></span>
-            </div>
-             @if (HttpContextAccessor.HttpContext.Session.GetString("Role") != "client")
-            {
-                <div class="form-group">
-                    <label asp-for="UserFullName" class="control-label"></label>
-                    <select asp-for="UserFullName" name="UserFullName">
-                        @foreach (var c in ViewBag.Users)
+<div class="row justify-content-center align-items-center h-100">
+    <div class="col-12 col-lg-9 col-xl-7">
+        <div class="card shadow-2-strong card-registration" style="border-radius: 15px;">
+            <div class="card-body p-4 p-md-5">
+                <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Appointment Form</h3>
+                <form asp-action="ContinueCreate" enctype="multipart/form-data">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="AppointmentID" />
+
+                    <div class="row">
+                         @if (HttpContextAccessor.HttpContext.Session.GetString("Role") != "client")
                         {
-                            <option value="@c.FirstName @c.LastName">@c.FirstName @c.LastName</option>
+                            <div class="col-md-6 mb-4">
+                                <label for="price">Client</label>
+                                <select class="select form-control-lg" asp-for="ClientID" name="ClientID">
+                                    @foreach (var c in ViewBag.Clients)
+                                    {
+                                        <option value="@c.ClientID">@c.FirstName  @c.LastName @c.Phone</option>
+                                    }
+                                </select>
+                                <label class="form-label select-label">Choose option</label>
+
+                            </div>
                         }
-                    </select>
-                    <span asp-validation-for="UserFullName" class="text-danger"></span>
-                </div>
-            }
-        <div class="form-row">
-            <br />
-            <div class="form-group col-md-6">
-                <input type="submit" value="Submit" class="btn btn-secondary btn-block" />
-            </div>
-            <br />
-            <div class="form-group col-md-6">
-                <a asp-action="Index" class="btn btn-secondary btn-block"><i class="fa fa-table"></i> Back to All Appointments</a>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <label for="price">Type</label>
+                            <select class="select form-control-lg w-100" asp-for="ProcedureID" name="ProcedureID">
+                                @foreach (var c in ViewBag.Procedures)
+                                {
+                                    <option value="@c.ProcedureID">@c.Name @c.MasterFirstName  @c.MasterLastName</option>
+                                }
+                            </select>
+                            <label class="form-label select-label">Choose option</label>
+
+                        </div>
+
+                    </div>
+                    
+                    <div class="row mt-4 pt-2">
+                        <input type="submit" value="Continue" class="btn btn-primary btn-lg">
+
+                    </div>
+                </form>
             </div>
         </div>
-    </form>
+    </div>
 </div>

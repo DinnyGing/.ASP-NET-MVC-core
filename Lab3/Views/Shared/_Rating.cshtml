@@ -1,0 +1,24 @@
+﻿@using Lab3.ViewModel
+@model ProcedureView
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@using System.Globalization
+
+<form asp-action="UpdateRating" enctype="multipart/form-data">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" name="ProcedureID" asp-for="@Model.ProcedureID" />
+    <div class="product-rating">
+
+        <input style="display: none" class="rating-button" type="submit" value="Save" class="btn btn-primary btn-lg">
+        <div class="rating">
+            <span class="star" data-rating="1" aria-label="Rate 1 star">★</span>
+            <span class="star" data-rating="2" aria-label="Rate 2 stars">★</span>
+            <span class="star" data-rating="3" aria-label="Rate 3 stars">★</span>
+            <span class="star" data-rating="4" aria-label="Rate 4 stars">★</span>
+            <span class="star" data-rating="5" aria-label="Rate 5 stars">★</span>
+        </div>
+
+        <span asp-for="Rating" class="rating-value" id="currentRating">@Model.Rating</span>
+        <input style="display: none" name="Rating" type="hidden" asp-for="@Model.Rating" />
+
+    </div>
+</form>

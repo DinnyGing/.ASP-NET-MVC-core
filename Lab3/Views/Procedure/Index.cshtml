@@ -1,48 +1,141 @@
 ﻿@{
     ViewData["Title"] = "Procedures";
 }
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 @using Lab3.Models
 @using Lab3.ViewModel
 @model IEnumerable<ProcedureView>
 
 <h2>Procedures</h2>
 
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Name)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Price)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.CategoryName)
-        </th>
-        <td></td>
-        <td></td>
-    </tr>
-    @foreach (var u in Model)
+<div class="w-100 d-flex justify-content-between p-3">
+    @if (HttpContextAccessor.HttpContext.Session.GetString("Role") != "client")
     {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => u.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => u.Price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => u.CategoryName)
-            </td>
-            <td>
-                <a asp-action="Details"  asp-route-id="@u.ProcedureID" class="btn btn-secondary btn-block"><i class="fa fa-table"></i> View Procedure</a>
-            </td>
-            <td>
-                <a asp-action="Delete"  asp-route-id="@u.ProcedureID" class="btn btn-secondary btn-block" onclick="return confirm('Are you sure to delete this record?')"><i class="fa fa-table"></i> Delete Procedure</a>
-            </td>
-        </tr>
-    }
-</table>
-
-    <div class="form-group col-md-6">
-        <a asp-action="Create" class="btn btn-secondary btn-block"><i class="fa fa-table"></i>Create New Procedure</a>
+        <div class="form-group col-md-6 mb-4 w-25">
+            <a asp-action="Create" class="btn btn-secondary btn-block"><i class="fa fa-table"></i>Create New Procedure</a>
     </div>
+    }
+    <div class="form-group col-md-6  w-75">
+        <form asp-action="Filter" enctype="multipart/form-data">
+
+            <div class="row d-flex justify-content-between">
+                    
+                <div class="col-md-6 form-floating mb-4 w-25">
+                    <input for="MinPrice" name="MinPrice" type="number" class="form-control" id="minPrice" min="0" placeholder="Min Price">
+                    <label for="minPrice">Min Price</label>
+                </div>
+                <div class="col-md-6 form-floating mb-4 w-25">
+                    <input for="MaxPrice" name="MaxPrice" type="number" class="form-control" id="maxPrice" min="0" placeholder="Max Price">
+                    <label for="maxPrice">Max Price</label>
+                </div>
+                <div class="col-md-6 mb-4 w-25">
+                    <select class="select form-control-lg" for="Type" name="Type">
+                        <option value="-1">All</option>
+                        @foreach (var c in ViewBag.Types)
+                        {
+                            <option value="@c.ProcedureTypeID">@c.Name</option>
+                        }
+                    </select>
+                    <label class="form-label select-label">Choose option</label>
+
+                </div>
+                <div class="col-md-6 mb-4 w-auto">
+                    <input type="submit" value="🔍" class="btn btn-primary btn-lg">
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+</br>
+<section style="background-color: #eee;">
+    <div class="container py-5">
+        @foreach (var productChunk in Model.Chunk(2))
+        {
+            <div class="w-100 d-flex justify-content-around">
+                @foreach (var u in productChunk)
+                {
+                    <div class="col-lg-4 m-4">
+                        <div class="card" data-product-id="@u.ProcedureID">
+                            <div class="d-flex justify-content-between p-3">
+                                <p class="lead mb-0">@u.CategoryName</p>
+                            </div>
+                            <img src="~/images/beauty-procedure.jpg"
+                                 class="card-img-top" alt="@u.Name" />
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between mb-3">
+                                    <h5 class="mb-0">@u.Name</h5>
+                                    <h5 class="text-dark mb-0">@u.Price UAH</h5>
+                                    <h5 class="text-dark mb-0">@u.Duration hours</h5>
+                                </div>
+
+                                <div class="d-flex justify-content-between mb-2">
+                                    <p class="text-muted mb-0">Master: <span class="fw-bold">@u.MasterFirstName @u.MasterLastName</span></p>
+
+                                    <form asp-action="UpdateRating" enctype="multipart/form-data">
+                                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                        <input type="hidden" name="ProcedureID" asp-for="@u.ProcedureID" />
+                                        <span type="hidden" id="roleSpan" data-role="@HttpContextAccessor.HttpContext.Session.GetString("Role")"></span>
+                                        <div class="product-rating">
+                                            @if (HttpContextAccessor.HttpContext.Session.GetString("Role") == "client")
+                                            {
+                                                <input style="display: none" class="rating-button" type="submit" value="Save" class="btn btn-primary btn-lg">
+
+                                            }
+                                            <div class="rating">
+                                                <span class="star" data-rating="1" aria-label="Rate 1 star">★</span>
+                                                <span class="star" data-rating="2" aria-label="Rate 2 stars">★</span>
+                                                <span class="star" data-rating="3" aria-label="Rate 3 stars">★</span>
+                                                <span class="star" data-rating="4" aria-label="Rate 4 stars">★</span>
+                                                <span class="star" data-rating="5" aria-label="Rate 5 stars">★</span>
+                                            </div>
+
+                                            <span asp-for="Rating" class="rating-value" id="currentRating">@u.Rating</span>
+                                            <input style="display: none" name="Rating" type="hidden" asp-for="@u.Rating" />
+
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="d-flex justify-content-between mb-2">
+                                    <p class="text-muted mb-0">@u.Description</p>
+                                </div>
+                                
+                                @if (HttpContextAccessor.HttpContext.Session.GetString("Role") != "client")
+                                {
+                                    <div class="d-flex justify-content-around mb-2">
+                                        <div class="d-flex justify-content-around mb-2">
+                                            <form asp-action="Edit" asp-route-id="@u.ProcedureID" method="post">
+                                                <button type="submit" class="btn btn-outline-primary me-1 flex-grow-1">
+                                                    Edit Procedure
+                                                </button>
+                                            </form>
+                                            <form asp-action="Delete" asp-route-id="@u.ProcedureID" method="post">
+                                                <button type="submit" class="btn btn-outline-primary me-1 flex-grow-1">
+                                                    Delete Procedure
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                }
+                                @if (HttpContextAccessor.HttpContext.Session.GetString("Role") == "client")
+                                {
+                                    <div class="d-flex justify-content-around mb-2">
+                                        <div class="d-flex justify-content-around mb-2">
+                                            <form asp-controller="Appointment" asp-action="Book" asp-route-id="@u.ProcedureID" method="get">
+                                                <button type="submit" class="btn btn-outline-primary me-1 flex-grow-1">
+                                                    Book procedure
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</section>
+
+
+    

@@ -1,72 +1,58 @@
-﻿using Lab3.Models;
+﻿using Lab3.DB;
+using Lab3.Models;
 using System.Text.Json;
 
 namespace Lab3.Repositories
 {
     public class UserRepository : IUserRepository
     {
-        string fileName = "C:\\Users\\Dinny\\source\\repos\\Lab3\\Lab3\\Context\\users.json";
-        private List<User> GetData()
+        public List<User> GetAll()
         {
-            string jsonContent = File.ReadAllText(fileName);
-            try
+            using (ApplicationContext db = new ApplicationContext())
             {
-                return JsonSerializer.Deserialize<List<User>>(jsonContent);
+                return db.Users.ToList();
             }
-            catch
-            {
-                return new List<User>();
-            }
-        }
-        private async Task SaveData(List<User> data)
-        {
-            using FileStream createStream = File.Create(fileName);
-            await JsonSerializer.SerializeAsync(createStream, data);
-            await createStream.DisposeAsync();
         }
         public async Task CreateAsync(User user)
         {
-            var data = GetData();
-            data.Add(user);
-
-            await SaveData(data);
+            using (ApplicationContext db = new ApplicationContext()){
+                if (user != null)
+                {
+                    db.Users.Add(user);
+                    db.SaveChanges();
+                }
+            }
         }
 
         public async Task DeleteAsync(int id)
         {
-            var data = GetData();
-
-            User currentUser = data.FirstOrDefault(p => p.UserID == id);
-            data.Remove(currentUser);
-
-            await SaveData(data);
-        }
-
-        public List<User> GetAll()
-        {
-            return GetData();
+            using ApplicationContext db = new ApplicationContext();
+            var user = db.Users.Find(id);
+            if (user != null)
+            {
+                db.Users.Remove(user);
+                db.SaveChanges();
+            }
         }
 
         public User GetById(int id)
         {
-            return GetData().FirstOrDefault(u => u.UserID == id);
+            return GetAll().FirstOrDefault(p => p.UserID == id);
         }
 
         public User GetByUserName(string userName)
         {
-            return GetData().FirstOrDefault(u => u.UserName == userName);
+            return GetAll().FirstOrDefault(u => u.UserName == userName);
         }
 
         public async Task UpdateAsync(User user)
         {
-            var data = GetData();
-
-            User currentUser = data.FirstOrDefault(p => p.UserID == user.UserID);
-            currentUser.UserName = user.UserName;
-            currentUser.Password = user.Password;
-            currentUser.Role = user.Role;
-
-            await SaveData(data);
+            using ApplicationContext db = new ApplicationContext();
+            if (user != null)
+            {
+                db.Users.Update(user);
+                db.SaveChanges();
+            }
         }
     }
 }

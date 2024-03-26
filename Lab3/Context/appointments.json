@@ -1,1 +1,0 @@
-[{"AppointmentID":1,"Date":"2023-12-22","Time":"12:00:00","UserId":1,"ProcedureId":1,"MasterId":1},{"AppointmentID":2,"Date":"2023-12-22","Time":"18:00:00","UserId":1,"ProcedureId":1,"MasterId":1},{"AppointmentID":3,"Date":"2023-12-29","Time":"10:00:00","UserId":2,"ProcedureId":1,"MasterId":1}]

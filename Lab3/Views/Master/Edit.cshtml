@@ -1,78 +1,136 @@
 ﻿@using Lab3.Models
 @using Lab3.ViewModel
-@model MasterView
+@model Master
 
-<h4>Master Form</h4>
-<hr />
-<div class="col-md-6">
-    <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="MasterID" />
-            <input type="hidden" asp-for="UserID" />
-            <div class="form-group">
-                <label asp-for="FirstName" class="control-label"></label>
-                <input asp-for="FirstName" class="form-control" />
-                <span asp-validation-for="FirstName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="LastName" class="control-label"></label>
-                <input asp-for="LastName" class="form-control" />
-                <span asp-validation-for="LastName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Gender" class="control-label"></label>
-                <input id="male" name="Gender" type="radio" value="male" asp-for="Gender" />
-                <span>male</span>
+<div class="row justify-content-center align-items-center h-100">
+    <div class="col-12 col-lg-9 col-xl-7">
+        <div class="card shadow-2-strong card-registration" style="border-radius: 15px;">
+            <div class="card-body p-4 p-md-5">
+                <h3 class="mb-4 pb-2 pb-md-0 mb-md-5">Master Form</h3>
+                <form asp-action="Edit" enctype="multipart/form-data">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="MasterID" />
+                    <input type="hidden" asp-for="UserID" />
 
-                <input id="female" name="Gender" type="radio" value="female" asp-for="Gender" /> 
-                <span>female</span>
-                <span asp-validation-for="LastName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Age" class="control-label"></label>
-                <input asp-for="Age" class="form-control" min="18" type="number"/>
-                <span asp-validation-for="Age" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Phone" class="control-label"></label>
-                <input asp-for="Phone" class="form-control" />
-                <span asp-validation-for="Phone" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CategoryName" class="control-label"></label>
-                <select asp-for="CategoryName" name="CategoryName">
-                @foreach (var c in ViewBag.Categories)
-                {
-                            <option value="@c.Name">@c.Name</option>
-                }
-                </select>
-                <span asp-validation-for="CategoryName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="AgeInCategory" class="control-label"></label>
-                <input asp-for="AgeInCategory" class="form-control" min="0" type="number"/>
-                <span asp-validation-for="AgeInCategory" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Level" class="control-label"></label>
-                <select asp-for="Level" name="Level">
-                    <option value="trainer">trainer</option>
-                    <option value="specialist">specialist</option>
-                    <option value="master">master</option>
-                    <option value="professional">professional</option>
-                    <option value="advanced">advanced</option>
-                </select>
-                <span asp-validation-for="CategoryName" class="text-danger"></span>
-            </div>
-        <div class="form-row">
-            <br />
-            <div class="form-group col-md-6">
-                <input type="submit" value="Submit" class="btn btn-secondary btn-block" />
-            </div>
-            <br />
-            <div class="form-group col-md-6">
-                <a asp-action="Index" class="btn btn-secondary btn-block"><i class="fa fa-table"></i> Back to All Masters</a>
+                    <div class="d-flex justify-content-center mb-2">
+                        @if (Model?.Photo != null)
+                        {
+                            <img id="selectedAvatar" src="data:image/jpeg;base64,@ConvertHelper.GetBase64String(Model.Photo)"
+                                 class="rounded-circle" style="width: 200px; height: 200px; object-fit: cover;" alt="example placeholder">
+                        }
+                        else
+                        {
+                            <img id="selectedAvatar" src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-1.webp"
+                                 class="rounded-circle" style="width: 200px; height: 200px; object-fit: cover;" alt="example placeholder">
+                        }
+                    </div>
+                    <div class="d-flex justify-content-center mb-2">
+                        <div class="btn btn-primary btn-rounded">
+                            <label class="form-label text-white m-1" for="upload">Choose file</label>
+                            <input type="file" name="upload" id="upload" onchange="displaySelectedImage(event, 'selectedAvatar')">
+                        </div>
+                    </div>          
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <div class="form-floating mb-3">
+                                <input asp-for="FirstName" type="text" class="form-control" id="firstName" placeholder="First Name">
+                                <label for="firstName">First Name</label>
+                                <span asp-validation-for="FirstName" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <div class="form-floating mb-3">
+                                <input asp-for="LastName" type="text" class="form-control" id="lastName" placeholder="Last Name">
+                                <label for="lastName">Last Name</label>
+                                <span asp-validation-for="LastName" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <div class="form-floating mb-3">
+                                <input asp-for="Age" type="number" class="form-control" id="age" placeholder="Age" min="18">
+                                <label for="age">Age</label>
+                                <span asp-validation-for="Age" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <div class="form-floating mb-3">
+                                <input asp-for="Phone" type="tel" class="form-control" id="phone" placeholder="Phone number">
+                                <label for="phone">Phone number</label>
+                                <span asp-validation-for="Phone" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <select class="select form-control-lg" asp-for="Level" name="Level">
+                                <option value="trainer">trainer</option>
+                                <option value="specialist">specialist</option>
+                                <option value="master">master</option>
+                                <option value="professional">professional</option>
+                                <option value="advanced">advanced</option>
+                            </select>
+                            <label class="form-label select-label">Choose option</label>
+
+                        </div>
+                        <div class="col-md-6 mb-4 pb-2">
+                            <h6 class="mb-2 pb-1">Gender:</h6>
+                            <div class="form-check form-check-inline">
+                                <input asp-for="Gender" class="form-check-input" type="radio" id="femaleGender" value="female">
+                                <label class="form-check-label" for="femaleGender">Female</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input asp-for="Gender" class="form-check-input" type="radio" id="maleGender" value="male">
+                                <label class="form-check-label" for="maleGender">Male</label>
+                            </div>
+                            <span asp-validation-for="Gender" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <select class="select form-control-lg" asp-for="CategoryID" name="CategoryID">
+                                @foreach (var c in ViewBag.Categories)
+                                {
+                                    <option value="@c.CategoryID">@c.Name</option>
+                                }
+                            </select>
+                            <label class="form-label select-label">Choose option</label>
+
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <div class="form-floating mb-3">
+                                <input asp-for="AgeInCategory" type="number" class="form-control" id="ageInCategory" placeholder="AgeInCategory" min="0">
+                                <label for="ageInCategory">Age In Category</label>
+                                <span asp-validation-for="AgeInCategory" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-4 pt-2">
+                        <input type="submit" value="Save" class="btn btn-primary btn-lg">
+                    </div>
+                </form>
             </div>
         </div>
-    </form>
+    </div>
 </div>
+
+<script>
+    function displaySelectedImage(event, elementId) {
+        const selectedImage = document.getElementById(elementId);
+        const fileInput = event.target;
+
+        if (fileInput.files && fileInput.files[0]) {
+            const reader = new FileReader();
+
+            reader.onload = function (e) {
+                selectedImage.src = e.target.result;
+            };
+
+            reader.readAsDataURL(fileInput.files[0]);
+        }
+    }
+</script>

@@ -8,22 +8,17 @@ namespace Lab3.Services
     {
         IProcedureRepository _procedureRepository;
         ICategoryRepository _categoryRepository;
-        public ProcedureService(ICategoryRepository categoryRepository, IProcedureRepository procedureRepository)
+        IMasterRepository _masterRepository;
+        IProcedureTypeRepository _procedureTypeRepository; 
+        public ProcedureService(ICategoryRepository categoryRepository, IProcedureRepository procedureRepository, IMasterRepository masterRepository, IProcedureTypeRepository procedureTypeRepository)
         {
             _categoryRepository = categoryRepository;
             _procedureRepository = procedureRepository;
+            _masterRepository = masterRepository;
+            _procedureTypeRepository = procedureTypeRepository;
         }
-        public void Create(ProcedureView procedureView)
+        public void Create(Procedure procedure)
         {
-            Category category = _categoryRepository.GetByName(procedureView.CategoryName);
-            Procedure procedure = new Procedure()
-            {
-                ProcedureID = procedureView.ProcedureID,
-                Name = procedureView.Name,
-                Description = procedureView.Description,
-                Price = procedureView.Price,
-                CategoryId = category.CategoryID
-            };
             _procedureRepository.CreateAsync(procedure);
         }
 
@@ -36,38 +31,88 @@ namespace Lab3.Services
         {
             List<ProcedureView> procedureViews = new List<ProcedureView>();
             List<Procedure> procedures = _procedureRepository.GetAll();
-            procedures.ForEach(procedure => { 
-                procedureViews.Add(GetById(procedure.ProcedureID)); 
+            procedures.ForEach(procedure => {
+                Master master = _masterRepository.GetById(procedure.MasterID);
+                Category category = _categoryRepository.GetById(master.CategoryID);
+                ProcedureType procedureType = _procedureTypeRepository.GetById(procedure.ProcedureTypeID);
+                ProcedureView procedureView = new ProcedureView()
+                {
+                    ProcedureID = procedure.ProcedureID,
+                    Name = procedureType.Name,
+                    Description = procedureType.Description,
+                    Duration = procedure.Duration,
+                    Price = procedure.Price,
+                    Rating = procedure.Rating,
+                    CategoryName = category.Name,
+                    MasterFirstName = master.FirstName,
+                    MasterLastName = master.LastName,
+                };
+                procedureViews.Add(procedureView); 
             });
             return procedureViews;
         }
-
-        public ProcedureView GetById(int id)
+        public List<ProcedureView> GetAllByProcedureTypeId(int procedureTypeId)
         {
-            Procedure procedure = _procedureRepository.GetById(id);
-            Category category = _categoryRepository.GetById(procedure.CategoryId);
-            ProcedureView procedureView = new ProcedureView()
+            List<ProcedureView> procedureViews = new List<ProcedureView>();
+            List<Procedure> procedures = _procedureRepository.GetAllByProcedureTypeId(procedureTypeId);
+            procedures.ForEach(procedure => {
+                Master master = _masterRepository.GetById(procedure.MasterID);
+                Category category = _categoryRepository.GetById(master.CategoryID);
+                ProcedureType procedureType = _procedureTypeRepository.GetById(procedure.ProcedureTypeID);
+                ProcedureView procedureView = new ProcedureView()
+                {
+                    ProcedureID = procedure.ProcedureID,
+                    Name = procedureType.Name,
+                    Description = procedureType.Description,
+                    Duration = procedure.Duration,
+                    Price = procedure.Price,
+                    Rating = procedure.Rating,
+                    CategoryName = category.Name,
+                    MasterFirstName = master.FirstName,
+                    MasterLastName = master.LastName,
+                };
+                procedureViews.Add(procedureView);
+            });
+            return procedureViews;
+        }
+        public List<ProcedureView> Filter(int MinPrice, int MaxPrice, int Type)
+        {
+            List<ProcedureView> procedures;
+            if (Type == -1)
             {
-                ProcedureID = procedure.ProcedureID,
-                Name = procedure.Name,
-                Description = procedure.Description,
-                Price = procedure.Price,
-                CategoryName = category.Name
-            };
-            return procedureView;
+                procedures = GetAll();
+            }
+            else
+            {
+                procedures = GetAllByProcedureTypeId(Type);
+            }
+            if (MaxPrice == 0)
+            {
+                procedures = procedures.Where(p => p.Price >= MinPrice).ToList();
+            }
+            else
+            {
+                procedures = procedures.Where(p => p.Price >= MinPrice && p.Price <= MaxPrice).ToList();
+            }
+            return procedures;
         }
 
-        public void Update(ProcedureView procedureView)
+        public Procedure GetById(int id)
         {
-            Category category = _categoryRepository.GetByName(procedureView.CategoryName);
-            Procedure procedure = new Procedure()
-            {
-                ProcedureID = procedureView.ProcedureID,
-                Name = procedureView.Name,
-                Description = procedureView.Description,
-                Price = procedureView.Price,
-                CategoryId = category.CategoryID
-            };
+            return _procedureRepository.GetById(id);
+        }
+
+        public void Update(Procedure procedure)
+        {
+            _procedureRepository.UpdateAsync(procedure);
+        }
+
+        public void UpdateRating(int ProcedureID, double Rating)
+        {
+            Procedure procedure = _procedureRepository.GetById(ProcedureID);
+            double rating = Rating + procedure.Rating * procedure.Votes;
+            procedure.Votes++;
+            procedure.Rating = rating / procedure.Votes;
             _procedureRepository.UpdateAsync(procedure);
         }
     }

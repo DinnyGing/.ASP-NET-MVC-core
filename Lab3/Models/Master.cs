@@ -2,10 +2,11 @@
 {
     public class Master : Person
     {
-        public int UserID {  get; set; }
         public int MasterID { get; set; }
-        public string Level { get; set; }
+        public required string Level { get; set; }
         public int AgeInCategory { get; set; }
-        public int CategoryId { get; set; }
+        public int CategoryID { get; set; }
+        public Category Category { get; set; }
+        public ICollection<Procedure> Procedures { get; set; } = new List<Procedure>();
     }
 }

@@ -4,5 +4,6 @@
     {
         public int CategoryID { get; set; }
         public string Name { get; set; }
+        public ICollection<Master> Masters { get; set; } = new List<Master>();
     }
 }

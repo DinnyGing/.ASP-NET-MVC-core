@@ -6,15 +6,15 @@ namespace Lab3.ViewModel
     public class AppointmentView
     {
         public int AppointmentID { get; set; }
-        [BindProperty, DataType(DataType.Date)]
-        public DateTime Date { get; set; }
-        [BindProperty, DataType(DataType.Time)]
-        public DateTime Time { get; set; }
-        public string UserFullName { get; set; }
-        public string MasterFullName { get; set; }
+        public string Date { get; set; }
+        public string Time { get; set; }
+        public int Duration { get; set; }
+        public string ClientFirstName { get; set; }
+        public string ClientLastName { get; set; }
+        public string MasterFirstName { get; set; }
+        public string MasterLastName { get; set; }
         public string ProcedureName { get; set; }
         public int ProcedurePrice { get; set; }
-        public string CategoryName { get; set; }
 
 
     }

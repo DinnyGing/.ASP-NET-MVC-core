@@ -1,21 +1,93 @@
-﻿@using Lab3.Models
-@model Client
+﻿@using Lab3.ViewModel
+@model ClientView
 
-<h4>Details</h4>
-<hr />
-<div class="card">
-    <div class="card-body">
-        <h5 class="card-title">@Model.FirstName @Model.LastName</h5>
-        <p class="card-text">Email: @Model.Email</p>
-        <p class="card-text">Gender: @Model.Gender</p>
-        <p class="card-text">Age: @Model.Age</p>
-        <p class="card-text">Phone: @Model.Phone</p>
-        <div class="text-center">
-            @Html.ActionLink("Edit", "Edit", new { id = Model.UserID }, new { @class = "btn btn-secondary btn-block" })
-                <br />
-            @Html.ActionLink("Delete", "Delete", new { id = Model.UserID }, new { @class = "btn btn-danger" })
+<h4>My Account</h4>
+<section style="background-color: #eee;">
+    <div class="container py-5">
+
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="card mb-4">
+                    <div class="card-body text-center">
+                        @if (Model.Photo != null)
+                        {
+                            <img id="selectedAvatar" src="data:image/jpeg;base64,@ConvertHelper.GetBase64String(Model.Photo)"
+                                 class="rounded-circle" style="width: 200px; height: 200px; object-fit: cover;" alt="example placeholder">
+                        }
+                        else
+                        {
+                            <img id="selectedAvatar" src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-1.webp"
+                                 class="rounded-circle" style="width: 200px; height: 200px; object-fit: cover;" alt="example placeholder">
+                        }
+                        <h5 class="my-3">@Model.UserName</h5>
+                        <div class="d-flex justify-content-center mb-2">
+                            <form asp-action="Edit" asp-route-id="@Model.ClientID" method="get">
+                                <button type="submit" class="btn btn-outline-primary me-1 flex-grow-1">
+                                    Edit
+                                </button>
+                            </form>
+                            <form asp-controller="Account" asp-action="Edit" asp-route-id="@Model.UserID" method="get">
+                                <button type="submit" class="btn btn-outline-primary me-1 flex-grow-1">
+                                    Edit User Name And Password
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-lg-8">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Full Name</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0">@Model.FirstName @Model.LastName</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Gender</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0">@Model.Gender</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Phone</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0">@Model.Phone</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Email</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0">@Model.Email</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Age</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0">@Model.Age</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-</div>
+</section>
 
 

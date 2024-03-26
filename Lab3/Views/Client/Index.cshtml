@@ -5,42 +5,35 @@
 @model IEnumerable<Client>
 
 <h2>Clients</h2>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.FirstName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.LastName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Phone)
-        </th>
-        <td></td>
-        <td></td>
-    </tr>
-    @foreach (var u in Model)
-    {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => u.FirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => u.LastName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => u.Phone)
-            </td>
-            <td>
-                <a asp-action="Details"  asp-route-id="@u.UserID" class="btn btn-secondary btn-block"><i class="fa fa-table"></i> View Client</a>
-            </td>
-            <td>
-                    <a asp-action="Delete"  asp-route-id="@u.UserID" class="btn btn-secondary btn-block" onclick="return confirm('Are you sure to delete this record?')"><i class="fa fa-table"></i> Delete Client</a>
-            </td>
-        </tr>
-    }
-</table>
+<div class="w-175 d-flex justify-content-between p-3">
+    <div class="form-group col-md-6  w-100">
+        <form asp-action="Filter" enctype="multipart/form-data">
 
-<div class="form-group col-md-6">
-    <a asp-action="Create" class="btn btn-secondary btn-block"><i class="fa fa-table"></i>Create New Client</a>
+            <div class="row d-flex justify-content-between">
+
+                <div class="col-md-6 form-floating mb-4 w-25">
+                    <input for="FirstName" name="FirstName" type="text" class="form-control" id="FirstName" placeholder="First Name">
+                    <label for="FirstName">First Name</label>
+                </div>
+                <div class="col-md-6 form-floating mb-4 w-25">
+                    <input for="LastName" name="LastName" type="text" class="form-control" id="LastName" placeholder="Last Name">
+                    <label for="LastName">Last Name</label>
+                </div>
+                <div class="col-md-6 form-floating mb-4 w-25">
+                    <input for="Phone" name="Phone" type="tel" class="form-control" id="Phone" placeholder="Phone">
+                    <label for="Phone">Phone</label>
+                </div>
+                
+                <div class="col-md-6 mb-4 w-auto">
+                    <input type="submit" value="🔍" class="btn btn-primary btn-lg">
+                </div>
+            </div>
+        </form>
+    </div>
 </div>
+@foreach (var u in Model)
+{
+    <br />
+    <partial name="_ClientCard" model="u" />
+}
+

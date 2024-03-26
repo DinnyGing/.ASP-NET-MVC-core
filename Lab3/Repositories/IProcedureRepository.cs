@@ -6,7 +6,8 @@ namespace Lab3.Repositories
     {
         List<Procedure> GetAll();
         Procedure GetById(int id);
-        Procedure GetByName(string name);
+        List<Procedure> GetAllByProcedureTypeId(int procedureTypeId);
+        List<Procedure> GetAllByMasterId(int masterId);
         Task CreateAsync(Procedure procedure);
         Task UpdateAsync(Procedure procedure);
         Task DeleteAsync(int id);

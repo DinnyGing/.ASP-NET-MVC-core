@@ -2,26 +2,71 @@
 @model MasterView
 @inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
 
+<div class="card" style="border-radius: 15px; width: 80%">
+    <div class="card-body p-4">
+        <div class="d-flex text-black">
+            <div class="flex-shrink-0">
+                @if (Model.Photo != null)
+                {
+                    <img src="data:image/jpeg;base64,@ConvertHelper.GetBase64String(Model.Photo)"
+                         alt="@Model.FirstName @Model.LastName"
+                         class="img-fluid"
+                         style="width: 180px; border-radius: 10px;">
+                }
+                else
+                {
+                    <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-profiles/avatar-1.webp"
+                         alt="Generic placeholder image" class="img-fluid"
+                         style="width: 180px; border-radius: 10px;">
+                }
+            </div>
+            <div class="flex-grow-1 ms-3">
+                <h5 class="mb-1">@Model.FirstName @Model.LastName</h5>
+                <p class="mb-2 pb-1" style="color: #2b2a2a;">@Model.Gender</p>
+                <div class="d-flex justify-content-around rounded-3 py-2 mb-2"
+                     style="background-color: #efefef;">
+                    <div class="w-auto">
+                        <p class="small text-muted mb-1">User Name</p>
+                        <p class="mb-0">@Model.UserName</p>
+                    </div>
+                    <div class="w-auto">
+                        <p class="small text-muted mb-1">Age</p>
+                        <p class="mb-0">@Model.Age</p>
+                    </div>
+                    <div class="w-auto">
+                        <p class="small text-muted mb-1">Phone</p>
+                        <p class="mb-0">@Model.Phone</p>
+                    </div>
+                    <div class="w-auto">
+                        <p class="small text-muted mb-1">Category</p>
+                        <p class="mb-0">@Model.CategoryName</p>
+                    </div>
+                    <div class="w-auto">
+                        <p class="small text-muted mb-1">Age In Category</p>
+                        <p class="mb-0">@Model.AgeInCategory</p>
+                    </div>
+                    <div class="w-auto">
+                        <p class="small text-muted mb-1">Level</p>
+                        <p class="mb-0">@Model.Level</p>
+                    </div>
 
-<div class="col-lg-4 col-md-6 pb-4">
-    <div class="card">
-        <div class="card-body">
-            <h5 class="card-title">@Model.FirstName @Model.LastName</h5>
-            <p class="card-text">Gender: @Model.Gender</p>
-            <p class="card-text">Age: @Model.Age</p>
-            <p class="card-text">Phone: @Model.Phone</p>
-            <p class="card-text">Level: @Model.Level</p>
-            <p class="card-text">Age in Category: @Model.AgeInCategory</p>
-            <p class="card-text">Category Name: @Model.CategoryName</p>
-            @if (HttpContextAccessor.HttpContext.Session.GetString("Role") != "client")
-            {
-                <div class="text-center">
-                    @Html.ActionLink("Edit", "Edit", new { id = Model.MasterID }, new { @class = "btn btn-secondary btn-block" })
-                        <br />
-                    @Html.ActionLink("Delete", "Delete", new { id = Model.MasterID }, new { @class = "btn btn-danger" })
                 </div>
-            }
+                @if (HttpContextAccessor.HttpContext.Session.GetString("Role") != "client")
+                {
+                    <div class="d-flex justify-content-end pt-1">
+                        <form asp-action="Edit" asp-route-id="@Model.MasterID" method="get">
+                        <button type="submit" class="btn btn-outline-primary me-1 flex-grow-1">
+                            Edit Master
+                        </button>
+                    </form>
+                        <form asp-action="Delete" asp-route-id="@Model.MasterID" method="post">
+                        <button type="submit" class="btn btn-outline-primary me-1 flex-grow-1">
+                                Delete Master
+                        </button>
+                    </form>
+                </div>
+                }
+            </div>
         </div>
-
     </div>
 </div>

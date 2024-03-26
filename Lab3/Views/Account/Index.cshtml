@@ -1,0 +1,76 @@
+﻿@{
+    ViewData["Title"] = "Users";
+}
+@using Lab3.Models
+@model IEnumerable<User>
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+
+<h2>Users</h2>
+<div class="w-50 d-flex justify-content-between p-3">
+    <div class="form-group col-md-6  w-100">
+        <form asp-action="Filter" enctype="multipart/form-data">
+
+            <div class="row d-flex justify-content-between">
+
+                <div class="col-md-6 mb-4 pb-2">
+                    <h6 class="mb-2 pb-1">Role:</h6>
+                    <div class="form-check form-check-inline">
+                        <input for="Role" name="Role" class="form-check-input" type="radio" id="femaleGender" value="">
+                        <label class="form-check-label" for="femaleGender">All</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input for="Role" name="Role" class="form-check-input" type="radio" id="maleGender" value="client">
+                        <label class="form-check-label" for="maleGender">Client</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input for="Role" name="Role" class="form-check-input" type="radio" id="maleGender" value="master">
+                        <label class="form-check-label" for="maleGender">Master</label>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4 w-auto">
+                    <input type="submit" value="🔍" class="btn btn-primary btn-lg">
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+@foreach (var u in Model)
+{
+    <br />
+    <div class="card" style="border-radius: 15px; width: 80%">
+        <div class="card-body p-4">
+            <div class="d-flex text-black">
+                <div class="flex-grow-1 ms-2">
+                    <div class="d-flex justify-content-around align-items-center pt-1">
+                        <div class="w-75 d-flex justify-content-around rounded-3 py-1 mb-1"
+                            style="background-color: #efefef;">
+                            <div class="w-auto">
+                                <p class="small text-muted mb-1">User Name</p>
+                                <p class="mb-2 pb-1">@u.UserName</p>
+                            </div>
+                            <div class="w-auto">
+                                <p class="small text-muted mb-1">Password</p>
+                                <p class="mb-2 pb-1">@u.Password</p>
+                            </div>
+                            <div class="w-auto">
+                                <p class="small text-muted mb-1">Role</p>
+                                <p class="mb-2 pb-1">@u.Role</p>
+                            </div>
+                        </div>
+                        <form asp-action="Edit" asp-route-id="@u.UserID" method="get">
+                            <button type="submit" class="btn btn-outline-primary me-1 flex-grow-1">
+                                Edit User
+                            </button>
+                        </form>
+                        <form asp-action="Delete" asp-route-id="@u.UserID" method="post">
+                            <button type="submit" class="btn btn-outline-primary me-1 flex-grow-1">
+                                Delete User
+                            </button>
+                        </form>
+                    </div>
+                
+                </div>
+            </div>
+        </div>
+    </div>
+}

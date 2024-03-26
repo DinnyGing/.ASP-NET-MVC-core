@@ -1,0 +1,101 @@
+﻿@{
+    ViewData["Title"] = "Appointment";
+}
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@using Lab3.Models
+@using Lab3.ViewModel
+@model Dictionary<String, Dictionary<String, AppointmentView>>
+<div class="form-group col-md-6">
+    <a asp-action="Index" class="btn btn-secondary btn-block"><i class="fa fa-table"></i>Back To All Appointments</a>
+</div>
+</br>
+<div class="container">
+    <div class="timetable-img text-center">
+        <img src="img/content/timetable.png" alt="">
+    </div>
+    <div class="table-responsive">
+        <table class="table table-bordered text-center">
+            <thead>
+                <tr class="bg-light-gray">
+                    <th class="text-uppercase">
+                    </th>
+                    @foreach (var dayEntry in Model)
+                    {
+                        <th class="text-uppercase">@dayEntry.Key.Split(' ')[0]</th>
+                    }
+                </tr>
+                <tr class="bg-light-gray">
+                    <th class="text-uppercase">
+                        Time
+                    </th>
+                    <th class="text-uppercase">Monday</th>
+                    <th class="text-uppercase">Tuesday</th>
+                    <th class="text-uppercase">Wednesday</th>
+                    <th class="text-uppercase">Thursday</th>
+                    <th class="text-uppercase">Friday</th>
+                    <th class="text-uppercase">Saturday</th>
+                    <th class="text-uppercase">Sunday</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int hour = 8; hour <= 18; hour+=2)
+                {
+                    string timeKey = $"{hour}:00";
+                    <tr>
+                         <td class="align-middle">@timeKey</td>
+                        @foreach (var dayEntry in Model)
+                        {
+                            if (dayEntry.Value.ContainsKey(timeKey))
+                            {
+                                var app = dayEntry.Value[timeKey];
+                                <td>
+                                    @if(@app.Duration <=30)
+                                    {
+                                        <span class="bg-pink padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16 xs-font-size13">@app.ProcedureName</span>
+                                    }
+                                    else if (@app.Duration <= 45)
+                                    {
+                                        <span class="bg-purple padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16 xs-font-size13">@app.ProcedureName</span>
+                                    }
+                                    else if (@app.Duration <= 60)
+                                    {
+                                        <span class="bg-sky padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16 xs-font-size13">@app.ProcedureName</span>
+                                    }
+                                    else if (@app.Duration <= 75)
+                                    {
+                                        <span class="bg-green padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16 xs-font-size13">@app.ProcedureName</span>
+                                    }
+                                    else if (@app.Duration <= 90)
+                                    {
+                                        <span class="bg-yellow padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16 xs-font-size13">@app.ProcedureName</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="bg-lightred padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16 xs-font-size13">@app.ProcedureName</span>
+                                    }
+                                    <div class="margin-10px-top font-size14">@app.Duration minutes</div>
+                                    @if (HttpContextAccessor.HttpContext.Session.GetString("Role") == "master")
+                                    {
+                                    <div class="font-size13 text-light-gray">@app.ClientFirstName @app.ClientLastName</div>
+                                    }
+                                    @if (HttpContextAccessor.HttpContext.Session.GetString("Role") == "client")
+                                    {
+                                    <div class="font-size13 text-light-gray">@app.MasterFirstName @app.MasterLastName</div>
+                                    }
+                                </td>
+                            }
+                            else
+                            {
+                                <td class="bg-light-gray">
+                                </td>
+                            }
+                        }
+                   
+                    </tr>
+                }
+
+                
+            </tbody>
+        </table>
+    </div>
+</div>

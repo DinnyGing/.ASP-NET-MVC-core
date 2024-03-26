@@ -2,6 +2,7 @@
 using Lab3.Repositories;
 using Lab3.ViewModel;
 using Microsoft.Win32;
+using System.Diagnostics.Metrics;
 
 namespace Lab3.Services
 {
@@ -19,20 +20,17 @@ namespace Lab3.Services
             _userRepository = userRepository;
         }
 
-        public void Create(RegisterMaster masterView)
+        public void Create(RegisterMaster masterView, IFormFile upload)
         {
-            int userID = _userRepository.GetAll().Last().UserID + 1;
-            Category category = _categoryRepository.GetByName(masterView.CategoryName);
             User user = new User()
             {
-                UserID = userID,
                 UserName = masterView.UserName,
                 Password = masterView.Password,
                 Role = "master",
             };
             Master master = new Master()
             {
-                UserID = userID,
+                User = user,
                 MasterID = masterView.MasterID,
                 FirstName = masterView.FirstName,
                 LastName = masterView.LastName,
@@ -41,16 +39,22 @@ namespace Lab3.Services
                 Age = masterView.Age,
                 AgeInCategory = masterView.AgeInCategory,
                 Level = masterView.Level,
-                CategoryId = category.CategoryID
+                CategoryID = masterView.Category,
+                Photo = masterView.Photo,
             };
+            if (upload != null && upload.Length > 0)
+            {
+                using (var memoryStream = new MemoryStream())
+                {
+                    upload.CopyToAsync(memoryStream);
+                    master.Photo = memoryStream.ToArray();
+                }
+            }
             _masterRepository.CreateAsync(master);
-            _userRepository.CreateAsync(user);
         }
 
         public void Delete(int id)
         {
-            Master master = _masterRepository.GetById(id);
-            _userRepository.DeleteAsync(master.UserID);
             _masterRepository.DeleteAsync(id);
         }
 
@@ -58,16 +62,42 @@ namespace Lab3.Services
         {
             List<MasterView> masterViews = new List<MasterView>();
             List<Master> masters = _masterRepository.GetAll();
-            masters.ForEach(master => {
+            foreach (var master in masters)
+            {
                 masterViews.Add(GetById(master.MasterID));
-            });
+            }
+            return masterViews;
+        }
+        public List<MasterView> Filter(int AgeInCategory, string Level, int Category)
+        {
+            List<MasterView> masterViews = new List<MasterView>();
+            List<Master> masters;
+            if (Category != -1)
+            {
+                masters = _masterRepository.GetAllByCategoryId(Category);
+            }
+            else
+                masters = _masterRepository.GetAll();
+            foreach (var master in masters)
+            {
+                masterViews.Add(GetById(master.MasterID));
+            }
+            if(Level != null)
+            {
+                masterViews = masterViews.Where(m => m.Level == Level).ToList();
+            }
+            if (AgeInCategory != 0)
+            {
+                masterViews = masterViews.Where(m => m.AgeInCategory == AgeInCategory).ToList();
+            }
             return masterViews;
         }
 
         public MasterView GetById(int id)
         {
             Master master = _masterRepository.GetById(id);
-            Category category = _categoryRepository.GetById(master.CategoryId);
+            Category category = _categoryRepository.GetById(master.CategoryID);
+            User user = _userRepository.GetById(master.UserID);
             MasterView masterView = new MasterView()
             {
                 MasterID= master.MasterID,
@@ -78,15 +108,20 @@ namespace Lab3.Services
                 Phone= master.Phone,
                 AgeInCategory= master.AgeInCategory,
                 Level = master.Level,
-                CategoryName = category.Name
+                CategoryID= master.CategoryID,
+                CategoryName = category.Name,
+                UserID= master.UserID,
+                UserName = user.UserName,
+                Photo = master.Photo
             };
             return masterView;
         }
 
         public MasterView GetUserById(int id)
         {
-            Master master = _masterRepository.GetUserById(id);
-            Category category = _categoryRepository.GetById(master.CategoryId);
+            Master master = _masterRepository.GetByUserId(id);
+            Category category = _categoryRepository.GetById(master.CategoryID);
+            User user = _userRepository.GetById(master.UserID);
             MasterView masterView = new MasterView()
             {
                 MasterID = master.MasterID,
@@ -97,27 +132,25 @@ namespace Lab3.Services
                 Phone = master.Phone,
                 AgeInCategory = master.AgeInCategory,
                 Level = master.Level,
-                CategoryName = category.Name
+                CategoryID = master.CategoryID,
+                CategoryName = category.Name,
+                UserID = master.UserID,
+                UserName = user.UserName,
+                Photo = master.Photo
             };
             return masterView;
         }
 
-        public void Update(MasterView masterView)
+        public void Update(Master master, IFormFile upload)
         {
-            Category category = _categoryRepository.GetByName(masterView.CategoryName);
-            Master master = new Master()
+            if (upload != null && upload.Length > 0)
             {
-                MasterID = masterView.MasterID,
-                UserID = masterView.UserID,
-                FirstName = masterView.FirstName,
-                LastName = masterView.LastName,
-                Age = masterView.Age,
-                Gender = masterView.Gender,
-                Phone = masterView.Phone,
-                AgeInCategory= masterView.AgeInCategory,
-                Level = masterView.Level,
-                CategoryId = category.CategoryID
-            };
+                using (var memoryStream = new MemoryStream())
+                {
+                    upload.CopyToAsync(memoryStream);
+                    master.Photo = memoryStream.ToArray();
+                }
+            }
             _masterRepository.UpdateAsync(master);
         }
     }
